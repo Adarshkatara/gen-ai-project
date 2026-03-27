@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard, FileText, Upload, Clock, User, Shield, Users, Video, BookOpen, Building, Bell, Star } from 'lucide-react';
-import { RealtimeContext } from '../context/RealtimeContext';
+import { RealtimeContext } from '../../context/RealtimeContext';
 
 export const FeeDetailsTab = () => {
   const [paid, setPaid] = useState(false);

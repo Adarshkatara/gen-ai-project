@@ -3,34 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart College System</title>
+    <title>NEXUS Edu — The Future of University Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
 </head>
-<body>
-    <div class="container block-center">
-        <h1><i class="fa-solid fa-graduation-cap"></i> NEXUS Edu</h1>
-        <p>The next-generation unified platform bridging CRM, LMS, and ERP gracefully.</p>
-        <div class="actions">
-            <a href="/login" class="btn"><i class="fa-solid fa-right-to-bracket"></i> Enter Portal</a>
-            <button class="btn btn-secondary" onclick="document.getElementById('apply-form').style.display='block'">
-                <i class="fa-solid fa-user-plus"></i> Admissions CRM
-            </button>
-        </div>
-        
-        <div id="apply-form" style="display:none; margin-top:3rem; max-width: 500px; width:100%;" class="card">
-            <h2 style="font-size: 2.2rem;"><i class="fa-solid fa-paper-plane"></i> Apply to Institute</h2>
-            <div style="position:relative;">
-                <i class="fa-regular fa-user" style="position:absolute; left:18px; top:17px; color:var(--text-muted);"></i>
-                <input type="text" id="leadName" placeholder="Candidate Full Name" style="padding-left:45px;">
-            </div>
-            <div style="position:relative;">
-                <i class="fa-regular fa-envelope" style="position:absolute; left:18px; top:17px; color:var(--text-muted);"></i>
-                <input type="email" id="leadEmail" placeholder="Communication Email" style="padding-left:45px;">
-            </div>
-            <button onclick="submitApplication()" class="btn" style="width:100%; margin-top:1rem;">Submit Application</button>
-        </div>
+<body class="landing-body">
+
+    <!-- Animated Background -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+
+    <!-- Navbar -->
+    <nav class="land-nav">
+        <div class="land-nav-inner">
+            <div class="land-logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>NEXUS <em>Edu</em></span>
+            </div>
+            <div class="land-nav-links">
+                <a href="#features">Features</a>
+                <a href="#stats">Impact</a>
+                <a href="#apply">Apply</a>
+            </div>
+            <a href="/login" class="land-cta-btn"><i class="fa-solid fa-right-to-bracket"></i> Enter Portal</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> AI-Powered University ERP Platform</div>
+        <h1 class="hero-title">The Future of<br><span class="gradient-text">University Management</span></h1>
+        <p class="hero-subtitle">A seamlessly unified CRM · LMS · ERP ecosystem built for modern universities. Manage students, faculty, admissions, fees, and results from a single powerful command center.</p>
+        <div class="hero-actions">
+            <a href="/login" class="land-btn-primary"><i class="fa-solid fa-rocket"></i> Launch Platform</a>
+            <a href="#apply" class="land-btn-outline" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-graduation-cap"></i> Apply for University</a>
+        </div>
+        <div class="hero-trust">
+            <span><i class="fa-solid fa-shield-halved" style="color:#10b981"></i> Enterprise Secure</span>
+            <span><i class="fa-solid fa-bolt" style="color:#f59e0b"></i> Real-Time Sync</span>
+            <span><i class="fa-solid fa-users" style="color:#6366f1"></i> Multi-Role Access</span>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="stats-banner" id="stats">
+        <div class="stat-item" data-target="12000">
+            <div class="stat-num" id="stat-students">0</div>
+            <div class="stat-desc">Students Enrolled</div>
+        </div>
+        <div class="stat-item" data-target="340">
+            <div class="stat-num" id="stat-faculty">0</div>
+            <div class="stat-desc">Expert Faculty</div>
+        </div>
+        <div class="stat-item" data-target="98">
+            <div class="stat-num" id="stat-rate">0</div>
+            <div class="stat-desc">% Placement Rate</div>
+        </div>
+        <div class="stat-item" data-target="50">
+            <div class="stat-num" id="stat-programs">0</div>
+            <div class="stat-desc">Active Programs</div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="features-section" id="features">
+        <div class="section-label"><i class="fa-solid fa-star"></i> Platform Capabilities</div>
+        <h2 class="section-title">Everything You Need,<br>In One Place</h2>
+        <div class="features-grid">
+            <div class="feature-card fc-purple">
+                <div class="fc-icon"><i class="fa-solid fa-user-graduate"></i></div>
+                <h3>Student Portal</h3>
+                <p>Fee management, exam registration, attendance tracking, advisor connect, and virtual classes in one seamless hub.</p>
+                <div class="fc-tag">For Students</div>
+            </div>
+            <div class="feature-card fc-blue">
+                <div class="fc-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <h3>Faculty Dashboard</h3>
+                <p>Mark attendance live, upload study materials, grade assignments, and communicate with students in real-time.</p>
+                <div class="fc-tag">For Faculty</div>
+            </div>
+            <div class="feature-card fc-green">
+                <div class="fc-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Admin Control Center</h3>
+                <p>Complete CRM + ERP management. Monitor fees, users, results, timetables, announcements, and audit logs.</p>
+                <div class="fc-tag">For Admins</div>
+            </div>
+            <div class="feature-card fc-orange">
+                <div class="fc-icon"><i class="fa-solid fa-bell"></i></div>
+                <h3>Real-Time Notifications</h3>
+                <p>Instant alerts across all portals. No refresh needed. Toast popups and live polling keep everyone updated.</p>
+                <div class="fc-tag">Live Engine</div>
+            </div>
+            <div class="feature-card fc-pink">
+                <div class="fc-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                <h3>Analytics & Reports</h3>
+                <p>Visual attendance trends, pass/fail ratios, fee summaries, and enrollment charts powering smart decisions.</p>
+                <div class="fc-tag">Data Driven</div>
+            </div>
+            <div class="feature-card fc-cyan">
+                <div class="fc-icon"><i class="fa-solid fa-lock"></i></div>
+                <h3>Role-Based Security</h3>
+                <p>Strict authentication layers. Each role sees exactly what they need. Admin can impersonate any portal safely.</p>
+                <div class="fc-tag">Enterprise Grade</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="apply-section" id="apply">
+        <div class="section-label"><i class="fa-solid fa-paper-plane"></i> Admissions Open</div>
+        <h2 class="section-title">Begin Your Journey.<br><span class="gradient-text">Apply Today.</span></h2>
+        <p class="section-sub">Fill in the form below and our admissions board will review your application within 48 hours.</p>
+        
+        <div id="apply-form" class="apply-card">
+            <div class="apply-form-header">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <div>
+                    <h3 style="font-size:1.6rem; margin:0;">University Application</h3>
+                    <p style="margin:4px 0 0; font-size:0.9rem; color:var(--text-muted);">All fields marked with * are required</p>
+                </div>
+            </div>
+            <div class="apply-grid">
+                <div class="field-wrap">
+                    <label>Full Legal Name *</label>
+                    <div class="input-icon-wrap">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" id="leadName" placeholder="e.g. Adarsh Katara">
+                    </div>
+                </div>
+                <div class="field-wrap">
+                    <label>Phone Number *</label>
+                    <div class="input-icon-wrap">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="leadPhone" placeholder="e.g. +91 98765 43210">
+                    </div>
+                </div>
+                <div class="field-wrap" style="grid-column: span 2;">
+                    <label>Email Address *</label>
+                    <div class="input-icon-wrap">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" id="leadEmail" placeholder="e.g. adarsh@gmail.com">
+                    </div>
+                </div>
+                <div class="field-wrap">
+                    <label>Date of Birth *</label>
+                    <div class="input-icon-wrap">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        <input type="date" id="leadDOB">
+                    </div>
+                </div>
+                <div class="field-wrap">
+                    <label>High School GPA</label>
+                    <div class="input-icon-wrap">
+                        <i class="fa-solid fa-star"></i>
+                        <input type="number" step="0.01" min="0" max="4.0" id="leadGPA" placeholder="e.g. 3.8 / 4.0">
+                    </div>
+                </div>
+                <div class="field-wrap" style="grid-column: span 2;">
+                    <label>Intended Major *</label>
+                    <div class="input-icon-wrap">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <select id="leadMajor">
+                            <option value="" disabled selected>Select your intended program</option>
+                            <option value="Computer Science">B.Tech — Computer Science & AI</option>
+                            <option value="Mechanical Engineering">B.Tech — Mechanical Engineering</option>
+                            <option value="Business Administration">BBA — Business Administration</option>
+                            <option value="Pre-Medicine">MBBS — Pre-Medicine / Bio-Sciences</option>
+                            <option value="Data Science">B.Sc — Data Science & Analytics</option>
+                            <option value="Civil Engineering">B.Tech — Civil Engineering</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button onclick="submitApplication()" class="apply-submit-btn"><i class="fa-solid fa-file-signature"></i> Submit Application to Admissions Board</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="land-footer">
+        <div class="land-logo" style="justify-content:center; margin-bottom:1rem;">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>NEXUS <em>Edu</em></span>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">© 2025 NEXUS Edu. A Next-Generation University Management System.</p>
+    </footer>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Animated counters
+        function animateCounter(id, target, suffix='') {
+            let current = 0;
+            const step = Math.ceil(target / 80);
+            const el = document.getElementById(id);
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current.toLocaleString() + suffix;
+                if (current >= target) clearInterval(timer);
+            }, 20);
+        }
+        const statsSection = document.getElementById('stats');
+        let counted = false;
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !counted) {
+                counted = true;
+                animateCounter('stat-students', 12000);
+                animateCounter('stat-faculty', 340);
+                animateCounter('stat-rate', 98, '%');
+                animateCounter('stat-programs', 50, '+');
+            }
+        });
+        observer.observe(statsSection);
+    </script>
 </body>
 </html>

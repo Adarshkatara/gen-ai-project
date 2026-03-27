@@ -1,3 +1,12 @@
+document.addEventListener('DOMContentLoaded', () => {
+    if(localStorage.getItem('savedNexusEmail')) {
+        const mailField = document.getElementById('email');
+        const passField = document.getElementById('password');
+        if(mailField) mailField.value = localStorage.getItem('savedNexusEmail');
+        if(passField) passField.value = localStorage.getItem('savedNexusPassword');
+    }
+});
+
 // Modern Toast Notification system
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
@@ -50,6 +59,11 @@ async function register() {
         const data = await res.json();
         
         if (data.success) {
+            localStorage.setItem('savedNexusEmail', email);
+            localStorage.setItem('savedNexusPassword', password);
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            
             document.getElementById('regName').value = ''; document.getElementById('regEmail').value = ''; document.getElementById('regPassword').value = '';
             showToast('Account created successfully!', 'success');
             toggleAuth('login');
@@ -72,6 +86,8 @@ async function login() {
         const data = await res.json();
         
         if (data.success) {
+            localStorage.setItem('savedNexusEmail', email);
+            localStorage.setItem('savedNexusPassword', password);
             showToast('Login successful. Redirecting...', 'success');
             setTimeout(() => window.location.href = data.redirect, 1000);
         } else {
@@ -87,11 +103,19 @@ async function login() {
 async function submitApplication() {
     const name = document.getElementById('leadName').value;
     const email = document.getElementById('leadEmail').value;
-    if(!name || !email) return showToast('Fill in both Name and Email', 'error');
+    const phone = document.getElementById('leadPhone').value;
+    const dob = document.getElementById('leadDOB').value;
+    const gpa = document.getElementById('leadGPA').value;
+    const major = document.getElementById('leadMajor').value;
+    
+    if(!name || !email || !phone || !dob || !major) return showToast('Please fill in all critical application fields', 'error');
 
     try {
-        await fetch('/api/leads', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, email}) });
-        showToast('Application sent! Our CRM team will email you shortly.', 'success');
+        await fetch('/api/leads', { 
+            method: 'POST', headers:{'Content-Type':'application/json'}, 
+            body: JSON.stringify({name, email, phone, dob, gpa, major}) 
+        });
+        showToast('Application successfully submitted to the Admissions Board!', 'success');
         document.getElementById('apply-form').animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0.95)' }], { duration: 300, fill: 'forwards' });
         setTimeout(() => document.getElementById('apply-form').style.display = 'none', 300);
     } catch(e) { showToast('Submission failed.', 'error') }

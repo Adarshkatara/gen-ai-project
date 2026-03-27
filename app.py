@@ -104,7 +104,9 @@ def api_courses():
 def api_leads():
     if request.method == 'POST':
         data = request.json
-        execute_db("INSERT INTO Leads (name, email) VALUES (?, ?)", (data['name'], data['email']))
+        # Handle backward compatibility cleanly if old fields arrive empty
+        execute_db("INSERT INTO Leads (name, email, phone, dob, gpa, major) VALUES (?, ?, ?, ?, ?, ?)", 
+                   (data['name'], data['email'], data.get('phone', ''), data.get('dob', ''), data.get('gpa', 0.0), data.get('major', 'Unknown')))
         return jsonify({'success': True})
     else:
         leads = query_db("SELECT * FROM Leads")
@@ -183,34 +185,37 @@ def faculty(path=''):
 
 @app.route('/api/faculty/courses')
 def faculty_courses_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
-    return jsonify(query_db("SELECT * FROM Courses WHERE faculty_id = ?", (session['user_id'],)))
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
+    return jsonify(query_db("SELECT * FROM Courses WHERE faculty_id = ?", (fac_id,)))
 
 @app.route('/api/faculty/students')
 def faculty_students_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     students = query_db("""
         SELECT DISTINCT u.id, u.full_name, u.email, u.profile_pic, c.title as course_name 
         FROM Users u 
         JOIN Enrollments e ON u.id = e.student_id 
         JOIN Courses c ON e.course_id = c.id 
         WHERE c.faculty_id = ?
-    """, (session['user_id'],))
+    """, (fac_id,))
     return jsonify(students)
 
 @app.route('/api/faculty/stats')
 def faculty_stats_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
-    fac_id = session['user_id']
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     st_count = query_db("SELECT COUNT(DISTINCT e.student_id) as c FROM Enrollments e JOIN Courses c ON e.course_id = c.id WHERE c.faculty_id=?", (fac_id,), one=True)['c']
     assign_count = query_db("SELECT COUNT(*) as c FROM Assignments a JOIN Courses c ON a.course_id = c.id WHERE c.faculty_id=?", (fac_id,), one=True)['c']
     return jsonify({'totalStudents': st_count, 'classesToday': 2, 'pendingAssignments': assign_count, 'attendanceRate': 85})
 
 @app.route('/api/faculty/attendance', methods=['GET', 'POST'])
 def faculty_attendance_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     if request.method == 'GET':
-        return jsonify(query_db("SELECT a.*, u.full_name, c.title as course_name FROM Attendance a JOIN Courses c ON a.course_id=c.id JOIN Users u ON a.student_id=u.id WHERE c.faculty_id=?", (session['user_id'],)))
+        return jsonify(query_db("SELECT a.*, u.full_name, c.title as course_name FROM Attendance a JOIN Courses c ON a.course_id=c.id JOIN Users u ON a.student_id=u.id WHERE c.faculty_id=?", (fac_id,)))
     
     data = request.json
     execute_db("INSERT INTO Attendance (course_id, student_id, date, status) VALUES (?, ?, ?, ?)", (data['course_id'], data['student_id'], data['date'], data['status']))
@@ -218,9 +223,10 @@ def faculty_attendance_api():
 
 @app.route('/api/faculty/marks', methods=['GET', 'POST'])
 def faculty_marks_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     if request.method == 'GET':
-        return jsonify(query_db("SELECT m.*, u.full_name, c.title as course_name FROM Marks m JOIN Courses c ON m.course_id=c.id JOIN Users u ON m.student_id=u.id WHERE c.faculty_id=?", (session['user_id'],)))
+        return jsonify(query_db("SELECT m.*, u.full_name, c.title as course_name FROM Marks m JOIN Courses c ON m.course_id=c.id JOIN Users u ON m.student_id=u.id WHERE c.faculty_id=?", (fac_id,)))
     
     data = request.json
     execute_db("INSERT INTO Marks (student_id, course_id, exam_type, marks, max_marks) VALUES (?, ?, ?, ?, ?)", (data['student_id'], data['course_id'], data['exam_type'], data['marks'], data['max_marks']))
@@ -228,9 +234,10 @@ def faculty_marks_api():
 
 @app.route('/api/faculty/materials', methods=['GET', 'POST'])
 def faculty_materials_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     if request.method == 'GET':
-        return jsonify(query_db("SELECT m.*, c.title as course_name FROM Materials m JOIN Courses c ON m.course_id=c.id WHERE c.faculty_id=?", (session['user_id'],)))
+        return jsonify(query_db("SELECT m.*, c.title as course_name FROM Materials m JOIN Courses c ON m.course_id=c.id WHERE c.faculty_id=?", (fac_id,)))
     
     data = request.json
     execute_db("INSERT INTO Materials (course_id, title, description, file_url, upload_date) VALUES (?, ?, ?, ?, ?)", (data['course_id'], data['title'], data['description'], data['file_url'], data['upload_date']))
@@ -238,9 +245,10 @@ def faculty_materials_api():
 
 @app.route('/api/faculty/assignments', methods=['GET', 'POST'])
 def faculty_assignments_new_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     if request.method == 'GET':
-        return jsonify(query_db("SELECT a.*, c.title as course_name FROM Assignments a JOIN Courses c ON a.course_id=c.id WHERE c.faculty_id=?", (session['user_id'],)))
+        return jsonify(query_db("SELECT a.*, c.title as course_name FROM Assignments a JOIN Courses c ON a.course_id=c.id WHERE c.faculty_id=?", (fac_id,)))
     
     data = request.json
     execute_db("INSERT INTO Assignments (course_id, title, description, due_date) VALUES (?, ?, ?, ?)", (data['course_id'], data['title'], data['description'], data['due_date']))
@@ -248,12 +256,13 @@ def faculty_assignments_new_api():
 
 @app.route('/api/faculty/messages', methods=['GET', 'POST'])
 def faculty_messages_api():
-    if session.get('role') != 'Faculty': return jsonify({'error': 'Unauthorized'}), 401
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
     if request.method == 'GET':
-        return jsonify(query_db("SELECT m.*, u.full_name as sender, c.title as course_name FROM Messages m JOIN Courses c ON m.course_id=c.id JOIN Users u ON m.sender_id=u.id WHERE c.faculty_id=?", (session['user_id'],)))
+        return jsonify(query_db("SELECT m.*, u.full_name as sender, c.title as course_name FROM Messages m JOIN Courses c ON m.course_id=c.id JOIN Users u ON m.sender_id=u.id WHERE c.faculty_id=?", (fac_id,)))
     
     data = request.json
-    execute_db("INSERT INTO Messages (sender_id, course_id, message) VALUES (?, ?, ?)", (session['user_id'], data['course_id'], data['message']))
+    execute_db("INSERT INTO Messages (sender_id, course_id, message) VALUES (?, ?, ?)", (fac_id, data['course_id'], data['message']))
     return jsonify({'success': True})
 
 # ======= REAL-TIME API POLLING ENGINE =======
@@ -278,13 +287,19 @@ def mark_notifs_read():
 
 @app.route('/api/realtime/dashboard', methods=['GET'])
 def realtime_dashboard():
-    role = session.get('role', 'Student')
+    # If using View Simulator in frontend, we don't know the exact intent from here easily except falling back to Admin logic.
+    # The frontend fetches stats based on its active state.
+    role = request.headers.get('X-Simulated-Role', session.get('role', 'Student'))
+    if session.get('role') == 'Admin':
+        # Default to whatever the frontend wants to query
+        pass
+
     stats = {}
     if role == 'Admin':
         stats['totalStudents'] = query_db("SELECT COUNT(*) as c FROM Users WHERE role='Student'", one=True)['c']
         stats['pendingFees'] = query_db("SELECT SUM(amount) as c FROM Fees WHERE status='Pending'", one=True)['c'] or 0
     elif role == 'Faculty':
-        uid = session.get('user_id')
+        uid = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
         stats['totalStudents'] = query_db("SELECT COUNT(DISTINCT e.student_id) as c FROM Enrollments e JOIN Courses c ON e.course_id=c.id WHERE c.faculty_id=?", (uid,), one=True)['c']
         stats['pendingAssignments'] = query_db("SELECT COUNT(*) as c FROM Assignments a JOIN Courses c ON a.course_id=c.id WHERE c.faculty_id=?", (uid,), one=True)['c']
     return jsonify(stats)
@@ -430,4 +445,14 @@ if __name__ == '__main__':
         conn.close()
         print("Initialized new SQLite database from schema.sql")
         
+    # Auto-migrate new CRM Application fields safely
+    try:
+        execute_db("ALTER TABLE Leads ADD COLUMN phone VARCHAR(20)")
+        execute_db("ALTER TABLE Leads ADD COLUMN dob DATE")
+        execute_db("ALTER TABLE Leads ADD COLUMN gpa DECIMAL(3, 2)")
+        execute_db("ALTER TABLE Leads ADD COLUMN major VARCHAR(100)")
+    except Exception:
+        pass
+        
     app.run(debug=True, port=5000)
+
