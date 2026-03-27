@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart College System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container block-center">
+        <h1><i class="fa-solid fa-graduation-cap"></i> NEXUS Edu</h1>
+        <p>The next-generation unified platform bridging CRM, LMS, and ERP gracefully.</p>
+        <div class="actions">
+            <a href="/login" class="btn"><i class="fa-solid fa-right-to-bracket"></i> Enter Portal</a>
+            <button class="btn btn-secondary" onclick="document.getElementById('apply-form').style.display='block'">
+                <i class="fa-solid fa-user-plus"></i> Admissions CRM
+            </button>
+        </div>
+        
+        <div id="apply-form" style="display:none; margin-top:3rem; max-width: 500px; width:100%;" class="card">
+            <h2 style="font-size: 2.2rem;"><i class="fa-solid fa-paper-plane"></i> Apply to Institute</h2>
+            <div style="position:relative;">
+                <i class="fa-regular fa-user" style="position:absolute; left:18px; top:17px; color:var(--text-muted);"></i>
+                <input type="text" id="leadName" placeholder="Candidate Full Name" style="padding-left:45px;">
+            </div>
+            <div style="position:relative;">
+                <i class="fa-regular fa-envelope" style="position:absolute; left:18px; top:17px; color:var(--text-muted);"></i>
+                <input type="email" id="leadEmail" placeholder="Communication Email" style="padding-left:45px;">
+            </div>
+            <button onclick="submitApplication()" class="btn" style="width:100%; margin-top:1rem;">Submit Application</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

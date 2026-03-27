@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - NEXUS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container block-center">
+        <h1 style="font-size: 3rem; margin-bottom: 2rem;"><i class="fa-solid fa-cubes"></i> NEXUS</h1>
+        <div class="card" style="max-width: 450px; width: 100%;">
+            <div class="tab-buttons" style="display:flex; justify-content:space-between; margin-bottom:2rem; gap: 15px;">
+                <button onclick="toggleAuth('login')" id="btn-login" class="btn" style="flex:1">Sign In</button>
+                <button onclick="toggleAuth('signup')" id="btn-signup" class="btn btn-secondary" style="flex:1">Register</button>
+            </div>
+            
+            <div id="error-msg" style="display:none;"></div>
+            <div id="success-msg" style="display:none;"></div>
+            
+            <div id="login-form">
+                <h2 style="font-size: 2rem; margin-bottom: 1.5rem;">Access Portal</h2>
+                <div style="position: relative;">
+                    <i class="fa-regular fa-envelope" style="position: absolute; left: 18px; top: 17px; color: var(--text-muted);"></i>
+                    <input type="email" id="email" placeholder="Email Address" style="padding-left: 48px;">
+                </div>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 18px; top: 17px; color: var(--text-muted);"></i>
+                    <input type="password" id="password" placeholder="Password" style="padding-left: 48px;">
+                </div>
+                <button onclick="login()" id="logBtn" class="btn" style="width:100%; margin-top:15px; padding:16px;"><i class="fa-solid fa-right-to-bracket"></i> Login into Platform</button>
+            </div>
+            
+            <div id="signup-form" style="display:none;">
+                <h2 style="font-size: 2rem; margin-bottom: 1.5rem;">Create Profile</h2>
+                <div style="position: relative;">
+                    <i class="fa-regular fa-user" style="position: absolute; left: 18px; top: 17px; color: var(--text-muted);"></i>
+                    <input type="text" id="regName" placeholder="Full Name" style="padding-left: 48px;">
+                </div>
+                <div style="position: relative;">
+                    <i class="fa-regular fa-envelope" style="position: absolute; left: 18px; top: 17px; color: var(--text-muted);"></i>
+                    <input type="email" id="regEmail" placeholder="Email Address" style="padding-left: 48px;">
+                </div>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 18px; top: 17px; color: var(--text-muted);"></i>
+                    <input type="password" id="regPassword" placeholder="Strong Password" style="padding-left: 48px;">
+                </div>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-user-tag" style="position: absolute; left: 18px; top: 17px; color: var(--text-muted);"></i>
+                    <select id="regRole" style="padding-left: 48px;">
+                        <option value="" disabled selected>Assign Framework Role</option>
+                        <option value="Student">Student (ERP/LMS)</option>
+                        <option value="Faculty">Faculty (ERP/LMS)</option>
+                        <option value="Admin">Administrator (CRM/ERP)</option>
+                    </select>
+                </div>
+                <button onclick="register()" id="regBtn" class="btn" style="width:100%; margin-top:10px; padding:16px;"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+            </div>
+            
+            <div style="margin-top: 2.5rem; text-align:center;">
+                <a href="/" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; display:inline-flex; align-items:center; gap:8px; transition: color 0.3s;"><i class="fa-solid fa-arrow-left-long"></i> Back to Homepage</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
