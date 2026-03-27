@@ -33,7 +33,7 @@ function App() {
           <Route path="*" element={<Dashboard />} />
         )}
       </Routes>
-      
+
       {/* Expose privilege switcher node exclusively to Master Admins */}
       {auth.user?.role === 'Admin' && (
         <AdminRoleSwitcher currentMode={adminViewMode} setMode={setAdminViewMode} />
