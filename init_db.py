@@ -1,33 +1,30 @@
-import mysql.connector
-from app import db_config
+"""
+init_db.py — Initialize the SQLite database for NEXUS Edu.
+Run this once after cloning: python init_db.py
+"""
+import sqlite3
+import os
 
-print("Starting database initialization...")
+DB_FILE = 'smart_college.db'
 
-# Remove 'database' from config so we can connect to the MySQL server globally
-config = db_config.copy()
-if 'database' in config:
-    del config['database']
+if os.path.exists(DB_FILE):
+    print(f"⚠️  '{DB_FILE}' already exists. Delete it first if you want a fresh reset.")
+    answer = input("Delete and recreate? (y/N): ").strip().lower()
+    if answer != 'y':
+        print("Aborted.")
+        exit(0)
+    os.remove(DB_FILE)
 
-try:
-    print("Connecting to MySQL using the credentials in app.py...")
-    conn = mysql.connector.connect(**config)
-    cursor = conn.cursor()
-    
-    print("Reading schema.sql...")
-    with open('schema.sql', 'r', encoding='utf-8') as f:
-        sql_file = f.read()
-        
-    # Split by semicolon and execute each complete statement
-    sql_commands = sql_file.split(';')
-    
-    print("Executing SQL commands...")
-    for command in sql_commands:
-        if command.strip():
-            cursor.execute(command)
-            
-    conn.commit()
-    conn.close()
-    print("✅ Success! Database 'smart_college' and all tables created.")
-    print("You can now login or register in the browser.")
-except Exception as e:
-    print(f"❌ Error setting up database: {e}")
+print("🔧 Creating database from schema.sql...")
+conn = sqlite3.connect(DB_FILE)
+with open('schema.sql', 'r', encoding='utf-8') as f:
+    script = f.read()
+conn.executescript(script)
+conn.commit()
+conn.close()
+print("✅ Database initialized successfully!")
+print("   Default credentials:")
+print("   Admin   → admin@college.com   / admin123")
+print("   Faculty → faculty@college.com / fac123")
+print("   Student → student@college.com / stu123")
+print("\nRun the app with: python app.py")

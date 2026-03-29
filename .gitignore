@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+student-dashboard/frontend/node_modules/
+
+# Build artifacts (keep react_dist since Flask serves it directly)
+student-dashboard/frontend/dist/
+student-dashboard/frontend/build_log.txt
+
+# Database (regenerated via init_db.py)
+# smart_college.db   <-- keep committed so GitHub clone works immediately
+
+# OS
+.DS_Store
+Thumbs.db
