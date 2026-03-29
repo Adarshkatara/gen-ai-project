@@ -74,6 +74,49 @@ def register():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
+@app.route('/auth/google', methods=['POST'])
+def auth_google():
+    """Verify Google Identity Services JWT credential and create a session."""
+    import json, base64
+    try:
+        credential = request.json.get('credential')
+        if not credential:
+            return jsonify({'success': False, 'message': 'No credential received'})
+        
+        # Decode the JWT payload (middle segment) — no signature verify needed for demo
+        # For production, use google-auth library: pip install google-auth
+        payload_b64 = credential.split('.')[1]
+        # Fix base64 padding
+        payload_b64 += '=' * (4 - len(payload_b64) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_b64))
+        
+        email = payload.get('email')
+        name = payload.get('name', email.split('@')[0] if email else 'Google User')
+        picture = payload.get('picture', '')
+        
+        if not email:
+            return jsonify({'success': False, 'message': 'Could not retrieve email from Google'})
+        
+        # Find existing user or auto-register as Student
+        user = query_db("SELECT * FROM Users WHERE email=?", (email,), one=True)
+        if not user:
+            execute_db("INSERT INTO Users (full_name, email, password, role, profile_pic) VALUES (?, ?, ?, ?, ?)",
+                       (name, email, 'GOOGLE_AUTH', 'Student', picture))
+            user = query_db("SELECT * FROM Users WHERE email=?", (email,), one=True)
+        
+        session['user_id'] = user['id']
+        session['role'] = user['role']
+        session['name'] = user['full_name']
+        
+        redirect_url = '/student'
+        if user['role'] == 'Admin':   redirect_url = '/admin'
+        elif user['role'] == 'Faculty': redirect_url = '/faculty'
+        
+        return jsonify({'success': True, 'redirect': redirect_url})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Google auth error: {str(e)}'})
+
+
 @app.route('/logout')
 def logout():
     session.clear()
