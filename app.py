@@ -80,6 +80,13 @@ def auth_google():
     import json, base64
     try:
         credential = request.json.get('credential')
+        requested_role = request.json.get('role', 'Student')  # Role chosen by user in modal
+        
+        # Validate role value — only allow known roles
+        allowed_roles = ['Student', 'Faculty', 'Admin']
+        if requested_role not in allowed_roles:
+            requested_role = 'Student'
+        
         if not credential:
             return jsonify({'success': False, 'message': 'No credential received'})
         
@@ -97,11 +104,12 @@ def auth_google():
         if not email:
             return jsonify({'success': False, 'message': 'Could not retrieve email from Google'})
         
-        # Find existing user or auto-register as Student
+        # Find existing user or auto-register with the chosen role
         user = query_db("SELECT * FROM Users WHERE email=?", (email,), one=True)
         if not user:
+            # New user — assign the role they picked in the modal
             execute_db("INSERT INTO Users (full_name, email, password, role, profile_pic) VALUES (?, ?, ?, ?, ?)",
-                       (name, email, 'GOOGLE_AUTH', 'Student', picture))
+                       (name, email, 'GOOGLE_AUTH', requested_role, picture))
             user = query_db("SELECT * FROM Users WHERE email=?", (email,), one=True)
         
         session['user_id'] = user['id']
