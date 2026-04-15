@@ -138,8 +138,9 @@ INSERT INTO Departments (name) VALUES ('Computer Science'), ('Mechanical Enginee
 
 INSERT INTO Courses (department_id, faculty_id, code, title, credits) VALUES 
 (1, 2, 'CS201', 'Data Structures', 4), 
-(1, 3, 'CS202', 'Operating Systems', 3),
-(2, 2, 'ME301', 'Thermodynamics', 3);
+(1, 2, 'CS202', 'Operating Systems', 3),
+(1, 2, 'CS301', 'Computer Networks', 3),
+(1, 2, 'MA201', 'Linear Algebra', 3);
 
 INSERT INTO Enrollments (student_id, course_id) VALUES 
 (4, 1), (4, 2), (4, 3), 

@@ -194,7 +194,8 @@ def dashboard_attendance_api():
     return jsonify([
         {'subjectId': {'name': 'Data Structures', 'code': 'CS201'}, 'totalClasses': 40, 'attendedClasses': 35},
         {'subjectId': {'name': 'Operating Systems', 'code': 'CS202'}, 'totalClasses': 38, 'attendedClasses': 20},
-        {'subjectId': {'name': 'Discrete Math', 'code': 'MA201'}, 'totalClasses': 42, 'attendedClasses': 28}
+        {'subjectId': {'name': 'Computer Networks', 'code': 'CS301'}, 'totalClasses': 35, 'attendedClasses': 25},
+        {'subjectId': {'name': 'Linear Algebra', 'code': 'MA201'}, 'totalClasses': 42, 'attendedClasses': 28}
     ])
 
 @app.route('/api/dashboard/timetable')
@@ -208,7 +209,9 @@ def dashboard_timetable_api():
 def dashboard_subjects_api():
     return jsonify([
         {'code': 'CS201', 'name': 'Data Structures', 'facultyName': 'Dr. Smith', 'facultyImage': 'https://ui-avatars.com/api/?name=Dr+Smith', 'credits': 3},
-        {'code': 'CS202', 'name': 'Operating Systems', 'facultyName': 'Prof. Johnson', 'facultyImage': 'https://ui-avatars.com/api/?name=Prof+Johnson', 'credits': 3}
+        {'code': 'CS202', 'name': 'Operating Systems', 'facultyName': 'Prof. Johnson', 'facultyImage': 'https://ui-avatars.com/api/?name=Prof+Johnson', 'credits': 3},
+        {'code': 'CS301', 'name': 'Computer Networks', 'facultyName': 'Dr. White', 'facultyImage': 'https://ui-avatars.com/api/?name=Dr+White', 'credits': 3},
+        {'code': 'MA201', 'name': 'Linear Algebra', 'facultyName': 'Prof. Gauss', 'facultyImage': 'https://ui-avatars.com/api/?name=Prof+Gauss', 'credits': 3}
     ])
 
 @app.route('/api/dashboard/attendance-trends')
