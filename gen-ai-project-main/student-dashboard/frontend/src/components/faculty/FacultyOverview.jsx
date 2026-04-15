@@ -14,9 +14,9 @@ const dummyChartData = [
 ];
 
 const todayClasses = [
-  { time: '09:00 AM', course: 'CS201 Data Structures', room: 'Lab 4', type: 'Practical' },
-  { time: '11:30 AM', course: 'ME301 Thermodynamics', room: 'Hall B', type: 'Lecture' },
-  { time: '02:00 PM', course: 'CS201 Data Structures', room: 'Room 102', type: 'Tutorial' },
+  { time: '09:00 AM', course: 'CS202 Operating Systems', room: 'Hall A', type: 'Lecture' },
+  { time: '11:30 AM', course: 'CS301 Computer Networks', room: 'Lab 2', type: 'Practical' },
+  { time: '02:00 PM', course: 'MA201 Linear Algebra', room: 'Room 305', type: 'Tutorial' },
 ];
 
 const recentActivity = [
