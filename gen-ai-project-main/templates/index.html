@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Edu — The Future of University Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+</head>
+<body class="landing-body">
+    <!-- Navbar -->
+    <nav class="land-nav">
+        <div class="land-nav-inner">
+            <div class="land-logo">
+                <i class="fa-solid fa-cubes"></i>
+                <span>NEXUS</span>
+            </div>
+            <div class="land-nav-links">
+                <a href="#features">Platform</a>
+                <a href="#stats">Impact</a>
+                <a href="#apply">Admissions</a>
+            </div>
+            <div class="land-nav-actions">
+                <a href="/login" class="nav-btn-outline">Sign In</a>
+                <a href="#apply" class="nav-btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge">Enterprise University OS</div>
+        <h1 class="hero-title">The modern operating system<br>for education.</h1>
+        <p class="hero-subtitle">Connect your entire academic workflow—from student administration to curriculum management—in one unified, high-performance platform.</p>
+        <div class="hero-actions">
+            <a href="/login" class="hero-btn-primary">Go to Dashboard <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#apply" class="hero-btn-outline">Contact Sales</a>
+        </div>
+        <div class="hero-image-container">
+            <div class="hero-dashboard-mockup" id="hero-mockup">
+                <!-- Title Bar -->
+                <div class="mockup-header">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    <span style="margin-left:10px;font-size:11px;color:#475569;font-family:monospace;">nexus.edu — Dashboard</span>
+                    <span style="margin-left:auto;font-size:10px;color:#1e3a5f;background:rgba(16,185,129,0.15);padding:2px 8px;border-radius:20px;border:1px solid rgba(16,185,129,0.2);">● Live</span>
+                </div>
+
+                <!-- Body -->
+                <div class="mockup-body">
+                    <!-- Sidebar -->
+                    <div class="mockup-sidebar" style="width:52px;display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:14px;">
+                        <div style="width:28px;height:28px;border-radius:7px;background:rgba(59,130,246,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;">📊</div>
+                        <div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:11px;">🎓</div>
+                        <div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:11px;">📚</div>
+                        <div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:11px;">💰</div>
+                        <div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:11px;">🔔</div>
+                    </div>
+
+                    <!-- Main content -->
+                    <div class="mockup-content" style="padding:14px;display:flex;flex-direction:column;gap:10px;overflow:hidden;">
+
+                        <!-- Role Tabs -->
+                        <div style="display:flex;gap:6px;margin-bottom:2px;" id="mock-tabs">
+                            <button onclick="switchTab('student')" id="tab-student" class="mock-tab active-tab">Student</button>
+                            <button onclick="switchTab('faculty')" id="tab-faculty" class="mock-tab">Faculty</button>
+                            <button onclick="switchTab('admin')"   id="tab-admin"   class="mock-tab">Admin</button>
+                        </div>
+
+                        <!-- Stat Cards Row -->
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+                            <div class="mock-stat-card" id="mock-s1">
+                                <div class="mock-stat-val" id="mock-v1">87%</div>
+                                <div class="mock-stat-lbl" id="mock-l1">Attendance</div>
+                            </div>
+                            <div class="mock-stat-card" id="mock-s2">
+                                <div class="mock-stat-val" id="mock-v2">3</div>
+                                <div class="mock-stat-lbl" id="mock-l2">Due Today</div>
+                            </div>
+                            <div class="mock-stat-card" id="mock-s3">
+                                <div class="mock-stat-val" id="mock-v3">₹1,500</div>
+                                <div class="mock-stat-lbl" id="mock-l3">Fees Due</div>
+                            </div>
+                        </div>
+
+                        <!-- Chart + Activity split -->
+                        <div style="display:grid;grid-template-columns:1fr 140px;gap:10px;flex:1;min-height:0;">
+                            <!-- Bar Chart -->
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;display:flex;flex-direction:column;">
+                                <div style="font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;" id="chart-title">Weekly Attendance (%)</div>
+                                <div style="display:flex;align-items:flex-end;gap:5px;flex:1;padding-bottom:4px;" id="bar-chart">
+                                    <!-- bars injected by JS -->
+                                </div>
+                                <div style="display:flex;gap:5px;justify-content:space-around;margin-top:4px;" id="bar-labels">
+                                </div>
+                            </div>
+
+                            <!-- Live Activity Feed -->
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;overflow:hidden;">
+                                <div style="font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Live Feed</div>
+                                <div id="activity-feed" style="display:flex;flex-direction:column;gap:6px;">
+                                    <!-- items injected by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+        .mock-tab {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+            color: #64748b; font-size: 10px; font-weight: 600; padding: 4px 10px;
+            border-radius: 5px; cursor: pointer; transition: all 0.2s; letter-spacing: .03em;
+        }
+        .mock-tab:hover { background: rgba(255,255,255,0.08); color: #94a3b8; }
+        .active-tab { background: rgba(59,130,246,0.2) !important; border-color: rgba(59,130,246,0.3) !important; color: #60a5fa !important; }
+        .mock-stat-card {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 8px; padding: 8px 10px; transition: background 0.25s, transform 0.2s; cursor: default;
+        }
+        .mock-stat-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+        .mock-stat-val { font-size: 1.1rem; font-weight: 800; color: #f1f5f9; letter-spacing: -0.5px; }
+        .mock-stat-lbl { font-size: 9px; color: #475569; text-transform: uppercase; letter-spacing: .06em; margin-top: 2px; }
+        .feed-item {
+            display: flex; align-items: center; gap: 6px; font-size: 9.5px; color: #475569;
+            background: rgba(255,255,255,0.03); border-radius: 5px; padding: 4px 6px;
+            animation: feedSlide 0.4s ease;
+        }
+        @keyframes feedSlide { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+        .feed-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .bar-col { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; }
+        .bar-fill { width: 100%; max-width: 20px; border-radius: 3px 3px 0 0; transition: height 0.6s cubic-bezier(.34,1.56,.64,1); }
+        .bar-day  { font-size: 8.5px; color: #334155; }
+        </style>
+
+        <script>
+        const tabData = {
+            student: {
+                stats: [
+                    { v: '87%', l: 'Attendance' },
+                    { v: '3',   l: 'Due Today'  },
+                    { v: '₹1,500', l: 'Fees Due' }
+                ],
+                chart: { title: 'Weekly Attendance (%)', days: ['M','T','W','T','F'], vals: [92,78,88,95,74], color: '#3b82f6' },
+                feed: [
+                    { dot: '#3b82f6', msg: 'Marked present — CS201' },
+                    { dot: '#10b981', msg: 'Assignment due soon' },
+                    { dot: '#f59e0b', msg: 'Fee reminder sent' },
+                ]
+            },
+            faculty: {
+                stats: [
+                    { v: '42',   l: 'Students'   },
+                    { v: '85%',  l: 'Avg Attend.' },
+                    { v: '7',    l: 'Assignments' }
+                ],
+                chart: { title: 'Class Attendance (%)', days: ['M','T','W','T','F'], vals: [85,90,78,88,92], color: '#10b981' },
+                feed: [
+                    { dot: '#10b981', msg: 'Alice submitted task' },
+                    { dot: '#3b82f6', msg: 'New message from Bob'  },
+                    { dot: '#a855f7', msg: 'Material uploaded'     },
+                ]
+            },
+            admin: {
+                stats: [
+                    { v: '312',  l: 'Students'  },
+                    { v: '28',   l: 'Faculty'   },
+                    { v: '₹82k', l: 'Fees Coll.' }
+                ],
+                chart: { title: 'Enrollment Trend', days: ['M','T','W','T','F'], vals: [60,72,68,80,88], color: '#a855f7' },
+                feed: [
+                    { dot: '#a855f7', msg: 'New user registered'  },
+                    { dot: '#ef4444', msg: 'Fee overdue — ID #44' },
+                    { dot: '#10b981', msg: 'Audit log updated'    },
+                ]
+            }
+        };
+
+        let activeTab = 'student';
+
+        function renderChart(data) {
+            const bc = document.getElementById('bar-chart');
+            const bl = document.getElementById('bar-labels');
+            document.getElementById('chart-title').textContent = data.title;
+            bc.innerHTML = ''; bl.innerHTML = '';
+            const max = Math.max(...data.vals);
+            data.vals.forEach((v, i) => {
+                const col = document.createElement('div');
+                col.className = 'bar-col';
+                const fill = document.createElement('div');
+                fill.className = 'bar-fill';
+                fill.style.cssText = `height:0;background:${data.color};opacity:0.8;`;
+                col.appendChild(fill);
+                bc.appendChild(col);
+                setTimeout(() => { fill.style.height = ((v / max) * 100) + '%'; }, 50 + i * 60);
+                const lbl = document.createElement('div');
+                lbl.className = 'bar-day'; lbl.textContent = data.days[i];
+                bl.appendChild(lbl);
+            });
+        }
+
+        function renderFeed(items) {
+            const feed = document.getElementById('activity-feed');
+            feed.innerHTML = '';
+            items.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'feed-item';
+                el.innerHTML = `<span class="feed-dot" style="background:${item.dot}"></span>${item.msg}`;
+                feed.appendChild(el);
+            });
+        }
+
+        function renderStats(stats) {
+            ['1','2','3'].forEach((n,i) => {
+                const v = document.getElementById('mock-v'+n);
+                const l = document.getElementById('mock-l'+n);
+                v.style.opacity = '0'; l.style.opacity = '0';
+                setTimeout(() => {
+                    v.textContent = stats[i].v; l.textContent = stats[i].l;
+                    v.style.transition = l.style.transition = 'opacity 0.3s';
+                    v.style.opacity = '1'; l.style.opacity = '1';
+                }, 120);
+            });
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.mock-tab').forEach(t => t.classList.remove('active-tab'));
+            document.getElementById('tab-'+tab).classList.add('active-tab');
+            activeTab = tab;
+            const d = tabData[tab];
+            renderStats(d.stats);
+            renderChart(d.chart);
+            renderFeed(d.feed);
+        }
+
+        // Boot
+        switchTab('student');
+
+        // Live feed rotation  
+        setInterval(() => {
+            const items = tabData[activeTab].feed;
+            items.push(items.shift());
+            renderFeed(items);
+        }, 2800);
+        </script>
+
+    <!-- Stats Section -->
+    <section class="metrics-section" id="stats">
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="stat-students">0</div>
+                <div class="metric-label">Active Students</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="stat-faculty">0</div>
+                <div class="metric-label">Expert Faculty</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="stat-rate">0</div>
+                <div class="metric-label">% Placement Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="stat-programs">0</div>
+                <div class="metric-label">Active Programs+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <h2 class="section-title">Everything you need to scale</h2>
+            <p class="section-subtitle">Powerful tools designed for administrators, faculty, and students, all working together in perfect synchrony.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fa-solid fa-user-graduate"></i></div>
+                <h3>Student Portal</h3>
+                <p>Fee management, exam registration, attendance tracking, advisor connect, and virtual classes in one seamless hub.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <h3>Faculty Dashboard</h3>
+                <p>Mark attendance live, upload study materials, grade assignments, and communicate with students in real-time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Admin Control Center</h3>
+                <p>Complete CRM + ERP management. Monitor fees, users, results, timetables, announcements, and audit logs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Real-Time Infrastructure</h3>
+                <p>Instant alerts across all portals. No refresh needed. Powered by a high-performance websocket engine.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Advanced Analytics</h3>
+                <p>Visual attendance trends, pass/fail ratios, fee summaries, and enrollment charts powering smart decisions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="fc-icon"><i class="fa-solid fa-lock"></i></div>
+                <h3>Enterprise Security</h3>
+                <p>Strict authentication layers. Each role sees exactly what they need. Granular permissions API.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="apply-section" id="apply">
+        <div class="apply-container">
+            <div class="apply-content">
+                <h2>Join the next generation of education.</h2>
+                <p>Submit your application today. Our admissions board will review your profile within 48 hours.</p>
+                <ul class="apply-benefits">
+                    <li><i class="fa-solid fa-check"></i> Seamless digital onboarding</li>
+                    <li><i class="fa-solid fa-check"></i> Instant access to student resources</li>
+                    <li><i class="fa-solid fa-check"></i> Direct communication with faculty</li>
+                </ul>
+            </div>
+            <div id="apply-form" class="apply-form-box">
+                <div class="apply-grid">
+                    <div class="field-wrap">
+                        <label>Full Legal Name *</label>
+                        <input type="text" id="leadName" placeholder="e.g. John Doe">
+                    </div>
+                    <div class="field-wrap">
+                        <label>Email Address *</label>
+                        <input type="email" id="leadEmail" placeholder="john@example.com">
+                    </div>
+                    <div class="field-wrap">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="leadPhone" placeholder="+1 (555) 000-0000">
+                    </div>
+                    <div class="field-wrap">
+                        <label>Date of Birth *</label>
+                        <input type="date" id="leadDOB">
+                    </div>
+                    <div class="field-wrap">
+                        <label>High School GPA</label>
+                        <input type="number" step="0.01" min="0" max="4.0" id="leadGPA" placeholder="e.g. 4.0">
+                    </div>
+                    <div class="field-wrap" style="grid-column: span 2;">
+                        <label>Intended Major *</label>
+                        <select id="leadMajor">
+                            <option value="" disabled selected>Select an intended program</option>
+                            <option value="Computer Science">B.Tech — Computer Science & AI</option>
+                            <option value="Mechanical Engineering">B.Tech — Mechanical Engineering</option>
+                            <option value="Business Administration">BBA — Business Administration</option>
+                            <option value="Pre-Medicine">MBBS — Pre-Medicine / Bio-Sciences</option>
+                            <option value="Data Science">B.Sc — Data Science & Analytics</option>
+                            <option value="Civil Engineering">B.Tech — Civil Engineering</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="submitApplication()" class="apply-submit-btn">Submit Application</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="land-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="land-logo">
+                    <i class="fa-solid fa-cubes"></i> NEXUS
+                </div>
+                <p>The operating system for modern universities.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#">Features</a>
+                    <a href="#">Security</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Nexus Education Systems. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function animateCounter(id, target, suffix='') {
+            let current = 0;
+            const step = Math.ceil(target / 80);
+            const el = document.getElementById(id);
+            if (!el) return;
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                let display = current;
+                if(target >= 1000 && current >= 1000) {
+                    display = (current/1000).toFixed(1) + 'k';
+                } else {
+                    display = current.toLocaleString();
+                }
+                el.textContent = display + suffix;
+                if (current >= target) clearInterval(timer);
+            }, 25);
+        }
+        const statsSection = document.getElementById('stats');
+        let counted = false;
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !counted) {
+                counted = true;
+                animateCounter('stat-students', 12400, '+');
+                animateCounter('stat-faculty', 340, '+');
+                animateCounter('stat-rate', 98, '%');
+                animateCounter('stat-programs', 50, '+');
+            }
+        });
+        observer.observe(statsSection);
+    </script>
+</body>
+</html>

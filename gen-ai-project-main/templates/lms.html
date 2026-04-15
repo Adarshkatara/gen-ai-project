@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS - Academic Core</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h2><i class="fa-solid fa-chalkboard-user" style="color:var(--primary)"></i> LMS Academy <span style="font-size:1rem; color:var(--text-muted); font-weight:400; margin-left:10px;">| Sector: {{ role }}</span></h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div class="user-badge float-anim"><i class="fa-solid fa-circle-user"></i> {{ name }}</div>
+            {% if role == 'Student' %}
+            <a href="/student" class="btn btn-secondary" style="padding:10px 16px; font-size:0.95rem;"><i class="fa-solid fa-arrow-left"></i> Hub Dashboard</a>
+            {% endif %}
+            <a href="/logout" class="btn" style="padding:10px 16px; font-size:0.95rem;"><i class="fa-solid fa-power-off"></i> Logout</a>
+        </div>
+    </div>
+    
+    <div class="container" style="max-width: 1400px;">
+        <div class="dashboard-grid" style="grid-template-columns: 2fr 1fr;">
+            
+            <div class="card pulse-hover" style="animation-delay: 0.1s;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3><i class="fa-solid fa-layer-group" style="color:var(--accent)"></i> Active Knowledge Modules</h3>
+                    {% if role == 'Faculty' %}
+                    <button class="btn" style="padding:8px 15px; font-size:0.9rem;"><i class="fa-solid fa-plus"></i> Create Module</button>
+                    {% endif %}
+                </div>
+                <!-- Grid within grid -->
+                <ul id="courses-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; border-bottom:none; margin-top:20px;">
+                    <li style="color:var(--text-muted); border:none; grid-column:1/-1; justify-content:center;"><i class="fa-solid fa-spinner fa-spin"></i> Connecting to Canvas...</li>
+                </ul>
+            </div>
+
+            <div class="card pulse-hover" style="animation-delay: 0.2s;">
+                <h3><i class="fa-solid fa-list-check" style="color:#f59e0b"></i> Assignments & Quizzes</h3>
+                <div style="height:350px; overflow-y:auto; padding-right:10px;" class="custom-scroll">
+                    <ul id="assignments-list">
+                        <li style="color:var(--text-muted); border:none;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching exams...</li>
+                    </ul>
+                </div>
+                {% if role == 'Faculty' %}
+                <button class="btn" style="width:100%; margin-top:15px; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border); box-shadow:none;"><i class="fa-solid fa-upload"></i> Publish Assignment</button>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        loadCourses();
+        loadAssignments();
+    </script>
+</body>
+</html>

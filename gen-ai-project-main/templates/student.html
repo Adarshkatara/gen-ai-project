@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - NEXUS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h2><i class="fa-solid fa-user-graduate" style="color:var(--primary)"></i> Student Portal <span style="font-size:1rem; color:var(--text-muted); font-weight:400; margin-left:10px;">| Class of 2027</span></h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div class="user-badge float-anim"><i class="fa-solid fa-circle-user"></i> {{ name }}</div>
+            <a href="/lms" class="btn btn-secondary" style="padding:10px 16px; font-size:0.95rem;"><i class="fa-solid fa-book-open-reader"></i> LMS Access</a>
+            <a href="/logout" class="btn" style="padding:10px 16px; font-size:0.95rem;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </div>
+    
+    <div class="container" style="max-width: 1200px;">
+        
+        <!-- Welcome Banner with moving effects -->
+        <div class="card banner-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(14,165,233,0.1) 100%); border-left: 4px solid var(--primary); display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h1 style="font-size: 2.2rem; margin-bottom: 5px;">Welcome back, <span style="color:var(--accent);">{{ name }}</span>! 👋</h1>
+                <p style="margin:0; font-size:1rem;">B.Tech Computer Science | Semester 4 | Roll: 24CS1009</p>
+            </div>
+            <div class="floating-icon" style="font-size: 4rem; color:var(--primary); opacity:0.8;">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+        </div>
+
+        <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            
+            <!-- Quick Stats -->
+            <div class="card pulse-hover" style="animation-delay: 0.1s;">
+                <h3><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Academic Progress</h3>
+                <div style="display:flex; justify-content:space-around; align-items:center; margin-top:2.5rem;">
+                    <div class="stat-circle">
+                        <svg viewBox="0 0 36 36" class="circular-chart blue">
+                          <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                          <path class="circle" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="percentage">85%</div>
+                        <div class="stat-label">Attendance</div>
+                    </div>
+                    <div class="stat-circle">
+                        <svg viewBox="0 0 36 36" class="circular-chart purple">
+                          <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                          <path class="circle" stroke-dasharray="92, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="percentage">A-</div>
+                        <div class="stat-label">Current CGPA</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deadlines -->
+            <div class="card pulse-hover" style="animation-delay: 0.2s;">
+                <h3><i class="fa-regular fa-clock" style="color:#f59e0b"></i> Upcoming Deadlines</h3>
+                <div class="scrolling-list-container">
+                    <ul class="scrolling-list">
+                        <li>
+                            <div><i class="fa-solid fa-code text-primary"></i> Data Structures Project</div>
+                            <span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444;">Tomorrow</span>
+                        </li>
+                        <li>
+                            <div><i class="fa-solid fa-pen text-primary"></i> Physics Lab Report</div>
+                            <span class="badge" style="background:rgba(245,158,11,0.2); color:#f59e0b;">In 3 Days</span>
+                        </li>
+                        <li>
+                            <div><i class="fa-solid fa-calculator text-primary"></i> Calculus Quiz</div>
+                            <span class="badge" style="background:rgba(16,185,129,0.2); color:#10b981;">Next Week</span>
+                        </li>
+                        <!-- duplicate for seamless loop illusions -->
+                        <li>
+                            <div><i class="fa-solid fa-code text-primary"></i> Data Structures Project</div>
+                            <span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444;">Tomorrow</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Financials / ERP -->
+            <div class="card pulse-hover" style="animation-delay: 0.3s;">
+                <h3><i class="fa-solid fa-file-invoice-dollar" style="color:#10b981"></i> Financial Overview</h3>
+                <ul id="fees-list" style="margin-top:1rem;">
+                    <li style="color:var(--text-muted); justify-content:center; border:none;"><i class="fa-solid fa-spinner fa-spin"></i> Loading fees...</li>
+                </ul>
+                <button class="btn" style="width:100%; margin-top:2.5rem; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border); box-shadow:none;"><i class="fa-solid fa-download"></i> Download Fee Receipt</button>
+            </div>
+            
+            <!-- Announcements -->
+            <div class="card pulse-hover" style="animation-delay: 0.4s; grid-column: 1 / -1;">
+                <h3><i class="fa-solid fa-bullhorn" style="color:var(--accent)"></i> Live Campus Announcements</h3>
+                <div class="marquee-container">
+                    <div class="marquee-content">
+                        <span><i class="fa-solid fa-bolt" style="color:#f59e0b"></i> Hackathon registrations close on Friday! </span>
+                        <span><i class="fa-solid fa-calendar-alt" style="color:var(--primary)"></i> Mid-term schedules have been published on the LMS. </span>
+                        <span><i class="fa-solid fa-trophy" style="color:#10b981"></i> Congratulations to the CS department for winning the tech symposium! </span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>loadFees();</script>
+</body>
+</html>

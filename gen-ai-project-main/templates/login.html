@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Secure Access</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="google-signin-client_id" content="706755090302-6292hrsvdf9bj4l8qsoj5uldp3elukmq.apps.googleusercontent.com">
+    <style>
+        :root {
+            --brand-color: #0f172a;
+            --brand-accent: #3b82f6;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --bg-body: #ffffff;
+            --bg-input: #f8fafc;
+            --border-color: #e2e8f0;
+            --focus-ring: rgba(59, 130, 246, 0.5);
+            --error-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Layout Structure */
+        .split-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Left Side - Brand Presentation */
+        .brand-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0f172a 50%, #0d1530 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ambient canvas background */
+        #particles-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .brand-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(ellipse at 10% 60%, rgba(59, 130, 246, 0.18), transparent 40%),
+                radial-gradient(ellipse at 90% 20%, rgba(99, 102, 241, 0.12), transparent 35%);
+            z-index: 1;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+        }
+
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+
+        /* Live Clock */
+        .live-clock {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #475569;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+        }
+        .live-clock .clock-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.7); }
+        }
+
+        .brand-hero h1 {
+            font-size: 2.8rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-hero p {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.65;
+            max-width: 380px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ── Animated Stats Row ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: background 0.3s;
+        }
+        .stat-card:hover {
+            background: rgba(255,255,255,0.07);
+        }
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            letter-spacing: -0.5px;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-label {
+            font-size: 0.72rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-top: 3px;
+        }
+
+        /* ── Feature Carousel ── */
+        .feature-carousel {
+            position: relative;
+            height: 90px;
+            overflow: hidden;
+        }
+        .feature-slide {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .feature-slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .feature-slide.exiting {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        .feature-icon {
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .feature-text h4 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 2px;
+        }
+        .feature-text p {
+            font-size: 0.75rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        /* Carousel dot indicators */
+        .carousel-dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 1rem;
+            justify-content: flex-start;
+        }
+        .c-dot {
+            width: 20px; height: 3px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.15);
+            transition: background 0.3s, width 0.3s;
+        }
+        .c-dot.active {
+            background: #3b82f6;
+            width: 32px;
+        }
+
+        /* Brand Footer */
+        .brand-footer {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #334155;
+            font-size: 0.8rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Right Side - Authentication Form */
+        .auth-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            background-color: #ffffff;
+            overflow-y: auto;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Typography & Headers */
+        .auth-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .auth-header h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+            color: #0f172a;
+        }
+
+        .auth-header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--brand-accent);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            background-color: var(--brand-color);
+            color: #ffffff;
+            border: none;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary:hover {
+            background-color: #1e293b;
+        }
+
+        .btn-google {
+            width: 100%;
+            background-color: #ffffff;
+            color: #334155;
+            border: 1px solid var(--border-color);
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-google:hover {
+            background-color: var(--bg-input);
+            border-color: #cbd5e1;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        /* Navigation Toggle */
+        .auth-toggle {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .auth-toggle a {
+            color: var(--brand-accent);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #fef2f2;
+            color: var(--error-color);
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background-color: #f0fdf4;
+            color: var(--success-color);
+            border: 1px solid #bbf7d0;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--brand-color);
+        }
+
+        /* Mobile specific */
+        @media (max-width: 900px) {
+            .split-layout {
+                flex-direction: column;
+            }
+            .brand-panel {
+                display: none;
+            }
+            .auth-panel {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="split-layout">
+        
+        <!-- Left Panel: Branding -->
+        <div class="brand-panel">
+            <canvas id="particles-canvas"></canvas>
+
+            <div class="brand-content" style="position:relative;z-index:2;">
+                <div class="logo-container">
+                    <div class="logo-icon"><i class="fa-solid fa-cubes"></i></div>
+                    NEXUS
+                </div>
+
+                <!-- Live Clock -->
+                <div class="live-clock">
+                    <span class="clock-dot"></span>
+                    <span id="live-time">--:-- --</span>
+                    &nbsp;·&nbsp; Live System
+                </div>
+
+                <div class="brand-hero">
+                    <h1>The modern OS for education.</h1>
+                    <p>Connect your entire academic workflow—from student administration to curriculum management—in one unified, high-performance platform.</p>
+                </div>
+
+                <!-- Animated Stats -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-value" id="s-students">0</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="s-faculty">0</div>
+                        <div class="stat-label">Faculty</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="s-rate">0%</div>
+                        <div class="stat-label">Pass Rate</div>
+                    </div>
+                </div>
+
+                <!-- Feature Carousel -->
+                <div class="feature-carousel" id="feat-carousel">
+                    <div class="feature-slide active">
+                        <div class="feature-icon" style="background:rgba(59,130,246,0.15);color:#60a5fa;"><i class="fa-solid fa-user-graduate"></i></div>
+                        <div class="feature-text">
+                            <h4>Student Portal</h4>
+                            <p>Attendance, fees, exams, advisor connect & online classes in one place.</p>
+                        </div>
+                    </div>
+                    <div class="feature-slide">
+                        <div class="feature-icon" style="background:rgba(16,185,129,0.15);color:#34d399;"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <div class="feature-text">
+                            <h4>Faculty Dashboard</h4>
+                            <p>Mark live attendance, grade submissions, and upload study materials.</p>
+                        </div>
+                    </div>
+                    <div class="feature-slide">
+                        <div class="feature-icon" style="background:rgba(168,85,247,0.15);color:#c084fc;"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="feature-text">
+                            <h4>Admin Control Center</h4>
+                            <p>Full CRM + ERP management with real-time analytics & audit logs.</p>
+                        </div>
+                    </div>
+                    <div class="feature-slide">
+                        <div class="feature-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24;"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="feature-text">
+                            <h4>Real-Time Infrastructure</h4>
+                            <p>Instant toast notifications across all portals. No refresh needed.</p>
+                        </div>
+                    </div>
+                    <div class="feature-slide">
+                        <div class="feature-icon" style="background:rgba(239,68,68,0.15);color:#f87171;"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="feature-text">
+                            <h4>Smart Analytics</h4>
+                            <p>Attendance trends, pass/fail ratios, fee summaries—powering decisions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-dots" id="carousel-dots"></div>
+            </div>
+
+            <div class="brand-footer">
+                <span>&copy; 2026 Nexus Education Systems</span>
+                <span style="color:#1e3a5f;">v2.4.1 · Enterprise</span>
+            </div>
+        </div>
+
+        <!-- Right Panel: Authentication -->
+        <div class="auth-panel">
+            <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Home</a>
+
+            <div class="auth-container">
+                <div id="error-msg" class="alert alert-error"></div>
+                <div id="success-msg" class="alert alert-success"></div>
+
+                <!-- LOGIN FORM -->
+                <div id="login-form">
+                    <div class="auth-header">
+                        <h2>Welcome back</h2>
+                        <p>Enter your credentials to access your workspace.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email address</label>
+                        <input type="email" id="email" class="form-control" placeholder="name@university.edu" autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-control" autocomplete="current-password">
+                    </div>
+
+                    <button onclick="login()" id="logBtn" class="btn-primary">
+                        Sign In
+                    </button>
+
+                    <div class="divider"><span>OR</span></div>
+
+                    <button onclick="signInWithGoogle()" id="googleBtn" class="btn-google">
+                        <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+
+                    <div class="auth-toggle">
+                        Don't have an account? <a onclick="toggleAuth('signup')">Create a profile</a>
+                    </div>
+                </div>
+
+                <!-- SIGNUP FORM -->
+                <div id="signup-form" style="display:none;">
+                    <div class="auth-header">
+                        <h2>Create your profile</h2>
+                        <p>Set up your account to get started.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regName">Full Name</label>
+                        <input type="text" id="regName" class="form-control" placeholder="John Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regEmail">Work Email</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="john@university.edu">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regPassword">Strong Password</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="At least 8 characters">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regRole">Select your Role</label>
+                        <select id="regRole" class="form-control" style="appearance: none;">
+                            <option value="" disabled selected>Select an option...</option>
+                            <option value="Student">Student (ERP/LMS)</option>
+                            <option value="Faculty">Faculty (ERP/LMS)</option>
+                            <option value="Admin">Administrator (CRM/ERP)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="register()" id="regBtn" class="btn-primary">
+                        Create Account
+                    </button>
+
+                    <div class="auth-toggle">
+                        Already have an account? <a onclick="toggleAuth('login')">Sign in</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        /* ── 1. Live Clock ── */
+        function updateClock() {
+            const now = new Date();
+            let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            const pad = n => String(n).padStart(2, '0');
+            document.getElementById('live-time').textContent = `${pad(h)}:${pad(m)}:${pad(s)} ${ampm}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        /* ── 2. Animated Stat Counters (pulls from API) ── */
+        function animateCount(el, target, suffix = '', duration = 1800) {
+            let start = null;
+            const step = timestamp => {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const val = Math.floor(eased * target);
+                el.textContent = val.toLocaleString() + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/admin/analytics', { credentials: 'include' });
+                if (!res.ok) throw new Error('not admin');
+                const d = await res.json();
+                animateCount(document.getElementById('s-students'), d.totalStudents || 12400, '+');
+                animateCount(document.getElementById('s-faculty'), d.totalFaculty   || 340, '+');
+                animateCount(document.getElementById('s-rate'),    98, '%');
+            } catch {
+                // Fallback showcase numbers if not admin / not logged in
+                animateCount(document.getElementById('s-students'), 12400, '+');
+                animateCount(document.getElementById('s-faculty'),  340, '+');
+                animateCount(document.getElementById('s-rate'),     98, '%');
+            }
+        }
+        loadStats();
+
+        /* ── 3. Feature Carousel ── */
+        (function() {
+            const slides = document.querySelectorAll('.feature-slide');
+            const dotsContainer = document.getElementById('carousel-dots');
+            let current = 0;
+
+            // Build dots
+            slides.forEach((_, i) => {
+                const d = document.createElement('div');
+                d.className = 'c-dot' + (i === 0 ? ' active' : '');
+                d.onclick = () => goTo(i);
+                dotsContainer.appendChild(d);
+            });
+
+            function goTo(n) {
+                slides[current].classList.remove('active');
+                slides[current].classList.add('exiting');
+                setTimeout(() => slides[current].classList.remove('exiting'), 600);
+                dotsContainer.children[current].classList.remove('active');
+                current = (n + slides.length) % slides.length;
+                slides[current].classList.add('active');
+                dotsContainer.children[current].classList.add('active');
+            }
+
+            setInterval(() => goTo(current + 1), 3500);
+        })();
+
+        /* ── 4. Floating Particle Canvas ── */
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, particles = [];
+
+            function resize() {
+                w = canvas.width  = canvas.offsetWidth;
+                h = canvas.height = canvas.offsetHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const COLORS = ['rgba(59,130,246,', 'rgba(99,102,241,', 'rgba(16,185,129,'];
+            for (let i = 0; i < 55; i++) {
+                particles.push({
+                    x: Math.random() * 1000,
+                    y: Math.random() * 800,
+                    r: Math.random() * 1.8 + 0.4,
+                    dx: (Math.random() - 0.5) * 0.35,
+                    dy: (Math.random() - 0.5) * 0.35,
+                    col: COLORS[Math.floor(Math.random() * COLORS.length)],
+                    alpha: Math.random() * 0.4 + 0.1
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                particles.forEach(p => {
+                    p.x += p.dx; p.y += p.dy;
+                    if (p.x < 0 || p.x > w) p.dx *= -1;
+                    if (p.y < 0 || p.y > h) p.dy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.col + p.alpha + ')';
+                    ctx.fill();
+                });
+
+                // Draw connecting lines between nearby particles
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(59,130,246,${0.06 * (1 - dist/100)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+    </script>
+</body>
+</html>
+<!-- Minor frontend update -->
