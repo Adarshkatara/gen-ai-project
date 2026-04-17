@@ -59,7 +59,7 @@ const FacultyOverview = ({ setActiveTab }) => {
         {statCards.map((s, idx) => (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: idx * 0.1 }}
-            key={idx} className="card flex items-center gap-5 hover:shadow-xl hover:-translate-y-1 transition-all"
+            key={idx} className="card bg-black dark:bg-black border-zinc-800 flex items-center gap-5 hover:shadow-xl hover:-translate-y-1 transition-all"
           >
             <div className={`p-4 rounded-2xl ${s.bg}`}>
               <s.icon size={28} className={s.color} />
@@ -78,7 +78,7 @@ const FacultyOverview = ({ setActiveTab }) => {
         <div className="lg:col-span-2 space-y-8">
           
           {/* Chart */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card bg-black dark:bg-black border-zinc-800">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold flex items-center gap-2"><Target className="text-red-500"/> Attendance Trends (Weekly)</h3>
             </div>
@@ -102,11 +102,11 @@ const FacultyOverview = ({ setActiveTab }) => {
           </motion.div>
 
           {/* Timetable */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="card bg-black dark:bg-black border-zinc-800">
             <h3 className="text-xl font-bold flex items-center gap-2 mb-6"><Clock className="text-emerald-500"/> Today's Schedule</h3>
             <div className="space-y-4">
               {todayClasses.map((cls, i) => (
-                <div key={i} className="flex items-stretch gap-4 p-4 rounded-2xl bg-red-50 dark:bg-zinc-900/50 border border-slate-100 dark:border-slate-800 hover:border-emerald-200 transition-colors">
+                <div key={i} className="flex items-stretch gap-4 p-4 rounded-2xl bg-zinc-950/50 dark:bg-zinc-950/50 border border-zinc-800 hover:border-emerald-500 transition-colors">
                   <div className="flex flex-col justify-center items-center px-4 border-r border-slate-200 dark:border-slate-700 w-28">
                     <span className="text-xs font-bold text-slate-400">SESSION</span>
                     <span className="text-sm font-black text-emerald-600">{cls.time}</span>
@@ -128,7 +128,7 @@ const FacultyOverview = ({ setActiveTab }) => {
         <div className="lg:col-span-1 space-y-8">
           
           {/* Quick Actions */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="card bg-gradient-to-br from-red-900 to-slate-900 border-none">
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="card bg-black dark:bg-black border border-zinc-800">
             <h3 className="text-xl font-bold flex items-center gap-2 mb-6 text-white"><Zap className="text-amber-400"/> Quick Access</h3>
             <div className="grid grid-cols-2 gap-3">
               <button onClick={() => setActiveTab('Assignments')} className="p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/5 transition-all text-left group">
@@ -151,7 +151,7 @@ const FacultyOverview = ({ setActiveTab }) => {
           </motion.div>
 
           {/* Recent Activity */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} className="card">
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} className="card bg-black dark:bg-black border-zinc-800">
             <h3 className="text-xl font-bold flex items-center gap-2 mb-6"><Calendar className="text-rose-500"/> Recent Activity</h3>
             <div className="space-y-6">
               {recentActivity.map((act) => (

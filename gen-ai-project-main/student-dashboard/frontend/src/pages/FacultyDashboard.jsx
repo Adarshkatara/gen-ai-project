@@ -15,7 +15,7 @@ const FacultyDashboard = () => {
   const [activeTab, setActiveTab] = useState('Dashboard');
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#09090b] relative">
+    <div className="flex h-screen overflow-hidden bg-black relative">
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-100"></div>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 overflow-y-auto bg-transparent relative z-10 fade-in-up">

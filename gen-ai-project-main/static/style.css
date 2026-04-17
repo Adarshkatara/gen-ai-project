@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --bg: #f8fafc;
-    --surface: rgba(255, 255, 255, 0.85);
-    --surface-hover: rgba(241, 245, 249, 0.9);
-    --primary: #2563eb;
-    --primary-hover: #1d4ed8;
-    --accent: #0284c7;
-    --text: #0f172a;
-    --text-muted: #475569;
-    --border: rgba(0, 0, 0, 0.1);
-    --ring: rgba(37, 99, 235, 0.3);
+    --bg: #09090b;
+    --surface: rgba(24, 24, 27, 0.85);
+    --surface-hover: rgba(39, 39, 42, 0.9);
+    --primary: #4f46e5;
+    --primary-hover: #6366f1;
+    --accent: #0ea5e9;
+    --text: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --border: rgba(255, 255, 255, 0.1);
+    --ring: rgba(79, 70, 229, 0.3);
     --glass-blur: blur(16px);
 }
 
 body {
     font-family: 'Outfit', sans-serif;
-    background: linear-gradient(135deg, var(--bg) 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, var(--bg) 0%, #18181b 100%);
     color: var(--text);
     margin: 0;
     min-height: 100vh;
@@ -54,14 +54,14 @@ p { color: var(--text-muted); font-size: 1.25rem; font-weight: 300; max-width: 6
 
 input, select {
     width: 100%; box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(24, 24, 27, 0.6);
     border: 1px solid var(--border);
     color: var(--text); padding: 14px 18px;
     border-radius: 12px; margin-bottom: 1.2rem;
     font-family: 'Outfit', sans-serif; font-size: 1rem;
     transition: all 0.3s ease;
 }
-input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--ring); background: rgba(255, 255, 255, 0.9); }
+input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--ring); background: rgba(24, 24, 27, 0.9); }
 
 .btn {
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -72,10 +72,10 @@ input:focus, select:focus { outline: none; border-color: var(--primary); box-sha
 }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5); filter: brightness(1.1); }
 .btn:active { transform: translateY(0); }
-.btn-secondary { background: rgba(0,0,0,0.03); border: 1px solid var(--border); box-shadow: none; color: var(--text); }
-.btn-secondary:hover { background: rgba(0,0,0,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid var(--border); box-shadow: none; color: var(--text); }
+.btn-secondary:hover { background: rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
-.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; background: rgba(255, 255, 255, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 30px rgba(0,0,0,0.05); }
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; background: rgba(24, 24, 27, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
 .navbar h2 { margin: 0; font-size: 1.8rem; display:flex; align-items:center; }
 
 .actions { display: flex; gap: 15px; justify-content: center; margin-top: 2.5rem; }
@@ -84,14 +84,14 @@ input:focus, select:focus { outline: none; border-color: var(--primary); box-sha
 
 ul { list-style: none; padding: 0; margin: 0; }
 li { padding: 1.2rem; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s, transform 0.2s; border-radius:12px; margin-bottom: 8px; }
-li:hover { background: rgba(0,0,0,0.03); transform: scale(1.01); }
+li:hover { background: rgba(255,255,255,0.05); transform: scale(1.01); }
 
 .tab-buttons button { border-radius: 12px; }
 .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
 .text-primary { color: var(--primary); margin-right: 8px; }
 
 /* Student Dashboard Additions */
-.user-badge { background: rgba(0,0,0,0.05); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--border); display:inline-flex; align-items:center; gap:8px;}
+.user-badge { background: rgba(255,255,255,0.08); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--border); display:inline-flex; align-items:center; gap:8px;}
 .float-anim { animation: float 6s ease-in-out infinite; }
 .floating-icon { animation: float 4s ease-in-out infinite; }
 @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
@@ -101,7 +101,7 @@ li:hover { background: rgba(0,0,0,0.03); transform: scale(1.01); }
 
 .stat-circle { position: relative; width: 100px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .circular-chart { display: block; margin: 0 auto; max-width: 100%; max-height: 250px; }
-.circle-bg { fill: none; stroke: rgba(0,0,0,0.08); stroke-width: 2.5; }
+.circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 2.5; }
 .circle { fill: none; stroke-width: 2.8; stroke-linecap: round; animation: progress 2s ease-out forwards; }
 @keyframes progress { 0% { stroke-dasharray: 0 100; } }
 .circular-chart.blue .circle { stroke: var(--accent); }
@@ -116,7 +116,7 @@ li:hover { background: rgba(0,0,0,0.03); transform: scale(1.01); }
 .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
 @keyframes scrollUp { 0% { transform: translateY(0); } 100% { transform: translateY(-30%); } }
 
-.marquee-container { width: 100%; overflow: hidden; background: rgba(255,255,255,0.5); padding: 15px; border-radius: 12px; border: 1px solid var(--border); box-sizing: border-box; }
+.marquee-container { width: 100%; overflow: hidden; background: rgba(24,24,27,0.5); padding: 15px; border-radius: 12px; border: 1px solid var(--border); box-sizing: border-box; }
 .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 20s linear infinite; padding-left: 100%; }
 .marquee-content span { margin-right: 50px; font-size: 1.1rem; font-weight: 500; }
 @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
