@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Users, BookOpen, FileText, CheckCircle, Clock, Calendar, ArrowRight, Zap, Bell, CheckSquare, Upload, Target } from 'lucide-react';
+import { Users, BookOpen, FileText, CheckCircle, Clock, Calendar, ArrowRight, Zap, Bell, CheckSquare, Upload, Target, Sparkles, AlertTriangle, Lightbulb } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -71,6 +71,41 @@ const FacultyOverview = ({ setActiveTab }) => {
           </motion.div>
         ))}
       </div>
+
+      {/* AI Insights Banner */}
+      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="relative overflow-hidden card bg-black dark:bg-black border border-indigo-500/30 p-6 flex flex-col md:flex-row items-center gap-6 group">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/5 to-transparent z-0 pointer-events-none"></div>
+        <div className="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/20 blur-3xl rounded-full"></div>
+        
+        <div className="bg-indigo-500/20 p-4 rounded-xl border border-indigo-500/30 relative z-10 flex-shrink-0">
+          <Sparkles className="text-indigo-400 animate-pulse" size={32} />
+        </div>
+        
+        <div className="flex-1 relative z-10">
+          <h3 className="text-xl font-black text-white flex items-center gap-2 mb-1">
+            AI Assistant Insights
+            <span className="bg-indigo-500/20 text-indigo-400 text-[10px] uppercase font-bold py-1 px-2 rounded-full tracking-wider border border-indigo-500/30">Beta</span>
+          </h3>
+          <p className="text-slate-400 text-sm font-medium mb-4">I've analyzed your recent course interactions. Here is what needs attention:</p>
+          
+          <div className="flex flex-col xl:flex-row gap-4">
+            <div className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 p-3 rounded-xl flex-1 hover:bg-red-500/20 transition-colors cursor-pointer">
+              <AlertTriangle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-white text-sm font-bold">Risk Alert</p>
+                <p className="text-slate-300 text-xs mt-1 leading-snug">3 students in <span className="font-semibold text-red-300">CS202</span> have erratic attendance this week. Consider a quick check-in.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl flex-1 hover:bg-emerald-500/20 transition-colors cursor-pointer">
+              <Lightbulb size={18} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-white text-sm font-bold">Smart Summary</p>
+                <p className="text-slate-300 text-xs mt-1 leading-snug">You have <span className="font-semibold text-emerald-300">15</span> unsorted assignments ready for grading and <span className="font-semibold text-amber-300">2</span> extensions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -146,6 +181,19 @@ const FacultyOverview = ({ setActiveTab }) => {
               <button onClick={() => setActiveTab('Marks')} className="p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/5 transition-all text-left group">
                 <CheckCircle className="text-amber-300 mb-3 group-hover:text-white transition-colors" size={24}/>
                 <span className="block text-sm font-bold text-white">Enter Grades</span>
+              </button>
+
+              <button onClick={() => alert("AI Quiz Generator opening...")} className="col-span-2 p-4 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 transition-all text-left group flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-2 bg-indigo-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                    <Sparkles className="text-indigo-400" size={22}/>
+                  </div>
+                  <div>
+                    <span className="block text-sm font-bold text-white">AI Quiz Generator</span>
+                    <span className="block text-xs font-medium text-indigo-300 mt-1">Generate questions from syllabus</span>
+                  </div>
+                </div>
+                <ArrowRight size={18} className="text-indigo-400/50 group-hover:text-indigo-300 group-hover:translate-x-1 transition-all"/>
               </button>
             </div>
           </motion.div>
