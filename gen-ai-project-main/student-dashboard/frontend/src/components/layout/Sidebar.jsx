@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { LayoutDashboard, FileText, User, FileBarChart, Users, MessageSquare, CreditCard, BookOpen, MonitorPlay, MessageCircle, Bell, Clock, Building, CheckSquare, Edit3, Folder, Send, Award, Calendar, FolderOpen } from 'lucide-react';
+import { LayoutDashboard, FileText, User, FileBarChart, Users, MessageSquare, CreditCard, BookOpen, MonitorPlay, MessageCircle, Bell, Clock, Building, CheckSquare, Edit3, Folder, Send, Award, Calendar, FolderOpen, Sparkles } from 'lucide-react';
 
 const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
   const { user } = useContext(AuthContext);
 
   const studentItems = [
     { label: 'Dashboard', icon: LayoutDashboard },
+    { label: 'AI Copilot', icon: Sparkles },
     { label: 'Registration', icon: FileText },
     { label: 'Main Account', icon: User },
     { label: 'Policies', icon: FileBarChart },

@@ -31,13 +31,17 @@ export const RegistrationTab = () => {
       <h2 className="text-xl font-semibold flex items-center gap-2 mb-6 text-slate-800 dark:text-slate-100"><FileText className="text-indigo-600 dark:text-indigo-400" size={20}/> Core Subject Registration</h2>
       <form onSubmit={(e)=>{e.preventDefault(); setSubmitted(true);}} className="space-y-4 max-w-lg">
         <div>
-          <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">Select Open Elective</label>
+          <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5 flex justify-between items-center">
+            <span>Select Open Elective</span>
+            <span className="text-[10px] uppercase font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 px-2 py-0.5 rounded-full shadow-sm">AI Active</span>
+          </label>
           <select disabled={submitted} required className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
             <option value="">Choose a subject...</option>
-            <option>Advanced Machine Learning</option>
+            <option>Advanced Machine Learning (⭐️ AI Recommended)</option>
             <option>Cybersecurity Cryptography</option>
             <option>Cloud Infrastructure</option>
           </select>
+          <p className="text-xs text-indigo-500 font-medium mt-2">Based on your grades in Discrete Math, Advanced ML is highly recommended.</p>
         </div>
         <button disabled={submitted} type="submit" className={`btn-primary w-full ${submitted ? 'bg-emerald-600 hover:bg-emerald-600 opacity-90' : ''}`}>
           {submitted ? 'Registration Confirmed' : 'Lock Choices'}
@@ -221,6 +225,60 @@ export const NotificationsTab = () => {
           </div>
         )) : <div className="py-10 text-center"><FileSearch size={32} className="mx-auto text-slate-300 dark:text-slate-600 mb-3"/><p className="text-slate-500 dark:text-slate-400 font-medium">No active communications.</p></div>}
       </div>
+    </motion.div>
+  );
+};
+
+export const AICopilotTab = () => {
+  const [query, setQuery] = useState('');
+  const [messages, setMessages] = useState([
+    { role: 'ai', text: 'Hello! I am Nexus Copilot, your personalized academic AI. How can I assist you with your schedule or studies today?' }
+  ]);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    setMessages(prev => [...prev, { role: 'user', text: query }]);
+    setQuery('');
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: 'ai', text: "I'm analyzing your academic data... As a demo AI, I can interpret your intent but I'm currently not connected to the live LLM API. Please check back later!" }]);
+    }, 1000);
+  };
+
+  return (
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="card flex flex-col h-[600px] border border-indigo-200 dark:border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.1)]">
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-white/10">
+        <div className="bg-indigo-500 p-2 rounded-xl text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Nexus AI Copilot</h2>
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Your Personal Academic Assistant</p>
+        </div>
+      </div>
+      
+      <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 custom-scrollbar">
+        {messages.map((msg, i) => (
+          <motion.div initial={{opacity:0, y: 10}} animate={{opacity:1, y: 0}} key={i} className={`flex ${msg.role === 'ai' ? 'justify-start' : 'justify-end'}`}>
+            <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'ai' ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-200/50 dark:border-white/5' : 'bg-indigo-600 text-white rounded-tr-none shadow-sm'}`}>
+              {msg.text}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      
+      <form onSubmit={handleSend} className="relative mt-auto">
+        <input 
+          type="text" 
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Ask about your attendance, grades, or campus policies..." 
+          className="w-full p-4 pr-12 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#09090b] text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all"
+        />
+        <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </form>
     </motion.div>
   );
 };

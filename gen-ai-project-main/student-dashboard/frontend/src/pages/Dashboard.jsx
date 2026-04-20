@@ -13,7 +13,8 @@ import FeedbackPanel from '../components/dashboard/FeedbackPanel';
 import { MessageCircle, User, FileBarChart, Users, Building, Bell } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-import { FeeDetailsTab, RegistrationTab, ExamSectionTab, AccountManagerTab, PoliciesViewerTab, AdvisorConnectTab, OnlineClassTab, FacilitiesTab, ValueAddedProgramsTab, AcademicFeedbacksTab, NotificationsTab } from '../components/student/StudentInteractiveTabs';
+import { FeeDetailsTab, RegistrationTab, ExamSectionTab, AccountManagerTab, PoliciesViewerTab, AdvisorConnectTab, OnlineClassTab, FacilitiesTab, ValueAddedProgramsTab, AcademicFeedbacksTab, NotificationsTab, AICopilotTab } from '../components/student/StudentInteractiveTabs';
+import AIAcademicInsights from '../components/student/AIAcademicInsights';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -41,6 +42,13 @@ const Dashboard = () => {
 
   if (loading) return <div className="min-h-screen flex items-center justify-center font-medium text-slate-500 dark:text-slate-400">Loading your dashboard...</div>;
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'Fee Details': return <FeeDetailsTab />;
@@ -55,23 +63,42 @@ const Dashboard = () => {
       case 'Value Added Course': return <ValueAddedProgramsTab />;
       case 'Academic Feedbacks':
       case 'Feedback Panel': return <AcademicFeedbacksTab />;
+      case 'AI Copilot': return <AICopilotTab />;
       case 'Dashboard':
       default:
         return (
-          <div className="space-y-8">
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+          <div className="space-y-8 pb-10">
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative z-20">
               <div>
-                <h1 className="text-4xl font-black text-slate-800 dark:text-white tracking-tight bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">Academic Overview</h1>
-                <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium text-lg">Welcome back, {user?.name}. Here is an overview of your current academic progress.</p>
+                <h1 className="text-4xl font-black text-slate-800 dark:text-white tracking-tight flex items-center gap-3">
+                  {getGreeting()}, <span className="text-gradient-ai">{user?.name?.split(' ')[0] || 'Scholar'}</span>
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium text-lg">Your academic metrics are synchronized. Here is your situational overview.</p>
               </div>
-              <motion.button whileHover={{ scale: 1.05 }} onClick={() => setShowFeedback(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 hover:bg-indigo-700 shadow-sm transition-all focus:ring-4 focus:ring-indigo-500/20">
-                <MessageCircle size={18} /> Help & Support
+              <motion.button whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(99,102,241,0.4)" }} onClick={() => setShowFeedback(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 hover:bg-indigo-700 shadow-[0_4px_14px_0_rgb(0,118,255,39%)] transition-all focus:ring-4 focus:ring-indigo-500/20">
+                <MessageCircle size={18} /> Support Desk
               </motion.button>
             </motion.div>
+
+            {/* Quick Action Bar */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex overflow-x-auto gap-4 pb-2 custom-scrollbar">
+               {[
+                 { label: 'Pay Semester Fee', action: () => setActiveTab('Fee Details') },
+                 { label: 'Join Next Live Node', action: () => setActiveTab('Online Class') },
+                 { label: 'Connect to Advisor', action: () => setActiveTab('My Advisor') },
+                 { label: 'Ask Nexus AI', action: () => setActiveTab('AI Copilot') },
+               ].map((btn, i) => (
+                 <button key={i} onClick={btn.action} className="whitespace-nowrap px-5 py-2.5 bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 border border-slate-200/50 dark:border-white/5 hover:border-indigo-400/50 hover:bg-white dark:hover:bg-slate-800 transition-all hover:-translate-y-1 hover:shadow-md">
+                   {btn.label}
+                 </button>
+               ))}
+            </motion.div>
             
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}><AttendanceChart data={data.attendanceTrends} /></motion.div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+            <AIAcademicInsights attendance={data.attendance} trends={data.attendanceTrends} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4 relative z-10">
               <div className="lg:col-span-2 space-y-8">
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}><AttendanceChart data={data.attendanceTrends} /></motion.div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6"><TimeTable timetable={data.timetable} /><AttendanceCirc attendance={data.attendance} /></div>
                 <SubjectCards subjects={data.subjects} />
               </div>
