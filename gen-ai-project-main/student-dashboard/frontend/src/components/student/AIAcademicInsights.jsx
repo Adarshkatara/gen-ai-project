@@ -37,14 +37,15 @@ const AIAcademicInsights = ({ attendance = [], trends = [] }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="glass-glow-panel p-6 mt-8 relative overflow-hidden group"
+      className="glass-glow-panel bg-zinc-950/80 backdrop-blur-2xl border border-white/10 p-6 mt-8 relative overflow-hidden group hover:border-indigo-500/30 transition-all duration-500 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
     >
       <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${colorTheme}`}></div>
       
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between z-10 relative">
         <div className="flex gap-4">
-            <div className="p-3 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-inner flex items-center justify-center animate-float">
-            {icon}
+            <div className="relative p-3 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.5)] flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] transition-all duration-500">
+              <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${colorTheme} opacity-10 group-hover:opacity-30 blur-md transition-opacity duration-500`}></div>
+              <div className="relative z-10 animate-pulse">{icon}</div>
             </div>
             <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -58,7 +59,7 @@ const AIAcademicInsights = ({ attendance = [], trends = [] }) => {
                 </p>
             </div>
         </div>
-        <button className="whitespace-nowrap px-4 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all outline-none focus:ring-4 focus:ring-indigo-500/20">
+        <button className="whitespace-nowrap px-5 py-2.5 rounded-xl bg-gradient-to-r from-zinc-800 to-zinc-900 border border-zinc-700 text-white font-semibold text-sm hover:from-indigo-600 hover:to-purple-600 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:-translate-y-1 transition-all duration-300 outline-none focus:ring-4 focus:ring-indigo-500/30">
             View Analytics
         </button>
       </div>

@@ -16,9 +16,13 @@ const FacultyDashboard = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-black relative">
+      {/* Background glowing orbs for premium feel */}
+      <div className="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-900/20 blur-[130px] pointer-events-none z-0 animate-pulse mix-blend-screen" style={{ animationDuration: '6s' }}></div>
+      <div className="absolute bottom-[-15%] right-[-5%] w-[40%] h-[60%] rounded-full bg-pink-900/10 blur-[120px] pointer-events-none z-0 animate-pulse mix-blend-screen" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-100"></div>
+      
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="flex-1 overflow-y-auto bg-transparent relative z-10 fade-in-up">
+      <div className="flex-1 overflow-y-auto bg-transparent relative z-10 fade-in-up transition-all duration-700">
         <Navbar />
         <main className="p-6 md:p-10 max-w-7xl mx-auto flex-1 animate-fade-in-up">
           {activeTab === 'Dashboard' && <FacultyOverview setActiveTab={setActiveTab} />}
