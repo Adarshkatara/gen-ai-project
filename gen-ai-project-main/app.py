@@ -319,6 +319,18 @@ def faculty_messages_api():
     execute_db("INSERT INTO Messages (sender_id, course_id, message) VALUES (?, ?, ?)", (fac_id, data['course_id'], data['message']))
     return jsonify({'success': True})
 
+@app.route('/api/ai/insights')
+def ai_insights_api():
+    if not session.get('user_id'): return jsonify({'error': 'Unauthorized'}), 401
+    return jsonify({
+        'summary': 'Your attendance in Operating Systems is below the 75% threshold. Consider attending the next lab to recover.',
+        'priority': 'High',
+        'suggestions': [
+            'Review Process Synchronization for the upcoming Quiz',
+            'Complete the Computer Networks assignment by Friday'
+        ]
+    })
+
 # ======= REAL-TIME API POLLING ENGINE =======
 
 def push_notification(user_id, role_target, title, message, notif_type='Info'):

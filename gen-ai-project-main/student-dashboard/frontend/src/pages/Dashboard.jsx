@@ -10,7 +10,7 @@ import SubjectCards from '../components/dashboard/SubjectCards';
 import AttendanceSummary from '../components/dashboard/AttendanceSummary';
 import AttendanceChart from '../components/dashboard/AttendanceChart';
 import FeedbackPanel from '../components/dashboard/FeedbackPanel';
-import { MessageCircle, User, FileBarChart, Users, Building, Bell } from 'lucide-react';
+import { MessageCircle, User, FileBarChart, Users, Building, Bell, Sparkles, BrainCircuit } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { FeeDetailsTab, RegistrationTab, ExamSectionTab, AccountManagerTab, PoliciesViewerTab, AdvisorConnectTab, OnlineClassTab, FacilitiesTab, ValueAddedProgramsTab, AcademicFeedbacksTab, NotificationsTab, AICopilotTab } from '../components/student/StudentInteractiveTabs';
@@ -22,19 +22,26 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [showFeedback, setShowFeedback] = useState(false);
   
-  const [data, setData] = useState({ attendance: [], timetable: [], subjects: [], attendanceTrends: [] });
+  const [data, setData] = useState({ attendance: [], timetable: [], subjects: [], attendanceTrends: [], aiInsights: null });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [attRes, timeRes, subRes, trendRes] = await Promise.all([
+        const [attRes, timeRes, subRes, trendRes, aiRes] = await Promise.all([
           axios.get('/api/dashboard/attendance'),
           axios.get('/api/dashboard/timetable'),
           axios.get('/api/dashboard/subjects'),
-          axios.get('/api/dashboard/attendance-trends')
+          axios.get('/api/dashboard/attendance-trends'),
+          axios.get('/api/ai/insights')
         ]);
-        setData({ attendance: attRes.data, timetable: timeRes.data, subjects: subRes.data, attendanceTrends: trendRes.data });
+        setData({ 
+          attendance: attRes.data, 
+          timetable: timeRes.data, 
+          subjects: subRes.data, 
+          attendanceTrends: trendRes.data,
+          aiInsights: aiRes.data
+        });
       } catch (err) { console.error(err); } finally { setLoading(false); }
     };
     fetchData();
@@ -92,6 +99,34 @@ const Dashboard = () => {
                    {btn.label}
                  </button>
                ))}
+            </motion.div>
+            
+            {/* Nexus Pulse Widget */}
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }} className="nexus-pulse-card group">
+              <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
+                <div className="space-y-4 max-w-2xl">
+                  <div className="flex items-center gap-2">
+                    <span className="badge-ai flex items-center gap-1.5"><Sparkles size={10}/> Nexus Pulse</span>
+                    <span className="text-xs font-bold text-white/60 tracking-widest uppercase">{data.aiInsights?.priority} Priority Insight</span>
+                  </div>
+                  <h2 className="text-2xl font-bold leading-tight">"{data.aiInsights?.summary}"</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {data.aiInsights?.suggestions.map((s, i) => (
+                      <div key={i} className="px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 text-xs font-semibold flex items-center gap-2">
+                        <BrainCircuit size={14} className="text-indigo-300"/> {s}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-col justify-end">
+                   <button onClick={() => setActiveTab('AI Copilot')} className="bg-white text-indigo-600 px-6 py-3 rounded-2xl font-black text-sm hover:bg-indigo-50 transition-all flex items-center gap-2 shadow-xl hover:-translate-y-1">
+                     Consult Nexus AI <MessageCircle size={16}/>
+                   </button>
+                </div>
+              </div>
+              <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:opacity-20 transition-opacity">
+                 <BrainCircuit size={200} />
+              </div>
             </motion.div>
             
             <AIAcademicInsights attendance={data.attendance} trends={data.attendanceTrends} />

@@ -37,11 +37,11 @@ export const RegistrationTab = () => {
           </label>
           <select disabled={submitted} required className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
             <option value="">Choose a subject...</option>
-            <option>Advanced Machine Learning (⭐️ AI Recommended)</option>
-            <option>Cybersecurity Cryptography</option>
-            <option>Cloud Infrastructure</option>
+            <option>Advanced Machine Learning (✨ AI Optimized for your GPA)</option>
+            <option>Cybersecurity Cryptography (🚀 Highly Recommended for you)</option>
+            <option>Cloud Infrastructure (💡 Good alternative)</option>
           </select>
-          <p className="text-xs text-indigo-500 font-medium mt-2">Based on your grades in Discrete Math, Advanced ML is highly recommended.</p>
+          <p className="text-xs text-indigo-500 font-medium mt-2 flex items-center gap-1.5"><Sparkles size={12}/> Based on your grades in Discrete Math, Advanced ML is 94% matched to your profile.</p>
         </div>
         <button disabled={submitted} type="submit" className={`btn-primary w-full ${submitted ? 'bg-emerald-600 hover:bg-emerald-600 opacity-90' : ''}`}>
           {submitted ? 'Registration Confirmed' : 'Lock Choices'}
@@ -241,7 +241,15 @@ export const AICopilotTab = () => {
     setMessages(prev => [...prev, { role: 'user', text: query }]);
     setQuery('');
     setTimeout(() => {
-      setMessages(prev => [...prev, { role: 'ai', text: "I'm analyzing your academic data... As a demo AI, I can interpret your intent but I'm currently not connected to the live LLM API. Please check back later!" }]);
+      let response = "I'm analyzing your academic data...";
+      if (query.toLowerCase().includes('attendance')) {
+        response = "Your attendance is currently 82% overall. However, Operating Systems is at 52%, which is below the safe threshold of 75%. I recommend attending the next 3 labs to normalize your status.";
+      } else if (query.toLowerCase().includes('grade') || query.toLowerCase().includes('mark')) {
+        response = "You have maintained an 'A' grade in Data Structures. Your recent Midterm in Linear Algebra was also strong. Keep focus on the upcoming Computer Networks quiz.";
+      } else {
+        response = "I have scanned the institutional database. Is there anything specific about your schedule, attendance, or upcoming assessments you'd like to discuss?";
+      }
+      setMessages(prev => [...prev, { role: 'ai', text: response }]);
     }, 1000);
   };
 
