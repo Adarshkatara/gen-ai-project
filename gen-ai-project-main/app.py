@@ -322,14 +322,36 @@ def faculty_messages_api():
 @app.route('/api/ai/insights')
 def ai_insights_api():
     if not session.get('user_id'): return jsonify({'error': 'Unauthorized'}), 401
+    
+    # Simulate personalized insights based on session name
+    name = session.get('name', 'Scholar').split(' ')[0]
     return jsonify({
-        'summary': 'Your attendance in Operating Systems is below the 75% threshold. Consider attending the next lab to recover.',
-        'priority': 'High',
+        'summary': f'Nexus Analysis: {name}, your attendance in Operating Systems (52%) is critical. Attending the next 3 labs will restore your eligibility.',
+        'priority': 'Critical',
         'suggestions': [
-            'Review Process Synchronization for the upcoming Quiz',
-            'Complete the Computer Networks assignment by Friday'
+            'Download the "Process Sync" cheatsheet from Materials',
+            'Your "Computer Networks" assignment is 85% complete—finish it today to maintain your GPA streak.',
+            'Schedule a sync with Dr. Smith for career guidance'
         ]
     })
+
+@app.route('/api/ai/chat', methods=['POST'])
+def ai_chat_api():
+    if not session.get('user_id'): return jsonify({'error': 'Unauthorized'}), 401
+    data = request.json
+    message = data.get('message', '').lower()
+    
+    response = "I'm analyzing the institutional data... "
+    if 'attendance' in message:
+        response = "Your aggregate attendance is 78%. You are safe in most subjects, but 'Operating Systems' needs immediate attention."
+    elif 'fee' in message or 'payment' in message:
+        response = "Your Semester 4 fees are fully paid. The next billing cycle starts in 3 months."
+    elif 'exam' in message or 'result' in message:
+        response = "Mid-term results show a 15% improvement in MA201. Keep up the momentum for the finals."
+    else:
+        response = "I am Nexus AI, your academic copilot. I can help you with attendance tracking, fee queries, and study recommendations."
+        
+    return jsonify({'response': response})
 
 # ======= REAL-TIME API POLLING ENGINE =======
 

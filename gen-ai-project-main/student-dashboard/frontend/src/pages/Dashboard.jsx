@@ -10,8 +10,9 @@ import SubjectCards from '../components/dashboard/SubjectCards';
 import AttendanceSummary from '../components/dashboard/AttendanceSummary';
 import AttendanceChart from '../components/dashboard/AttendanceChart';
 import FeedbackPanel from '../components/dashboard/FeedbackPanel';
-import { MessageCircle, User, FileBarChart, Users, Building, Bell, Sparkles, BrainCircuit } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { MessageCircle, User, FileBarChart, Users, Building, Bell, Sparkles, BrainCircuit, Sun, Cloud, Moon, Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import PerformanceHeatmap from '../components/dashboard/PerformanceHeatmap';
 
 import { FeeDetailsTab, RegistrationTab, ExamSectionTab, AccountManagerTab, PoliciesViewerTab, AdvisorConnectTab, OnlineClassTab, FacilitiesTab, ValueAddedProgramsTab, AcademicFeedbacksTab, NotificationsTab, AICopilotTab } from '../components/student/StudentInteractiveTabs';
 import AIAcademicInsights from '../components/student/AIAcademicInsights';
@@ -51,9 +52,9 @@ const Dashboard = () => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
-    return "Good Evening";
+    if (hour < 12) return { text: "Good Morning", icon: <Sun className="text-amber-400" size={32}/> };
+    if (hour < 18) return { text: "Good Afternoon", icon: <Cloud className="text-sky-400" size={32}/> };
+    return { text: "Good Evening", icon: <Moon className="text-indigo-400" size={32}/> };
   };
 
   const renderContent = () => {
@@ -78,7 +79,8 @@ const Dashboard = () => {
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative z-20">
               <div>
                 <h1 className="text-4xl font-black text-slate-800 dark:text-white tracking-tight flex items-center gap-3">
-                  {getGreeting()}, <span className="text-gradient-ai">{user?.name?.split(' ')[0] || 'Scholar'}</span>
+                  {getGreeting().icon}
+                  {getGreeting().text}, <span className="text-gradient-ai">{user?.name?.split(' ')[0] || 'Scholar'}</span>
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium text-lg">Your academic metrics are synchronized. Here is your situational overview.</p>
               </div>
@@ -131,6 +133,8 @@ const Dashboard = () => {
             
             <AIAcademicInsights attendance={data.attendance} trends={data.attendanceTrends} />
 
+            <PerformanceHeatmap />
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4 relative z-10">
               <div className="lg:col-span-2 space-y-8">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}><AttendanceChart data={data.attendanceTrends} /></motion.div>
@@ -149,7 +153,17 @@ const Dashboard = () => {
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-100"></div>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 overflow-y-auto bg-transparent relative z-10">
-        <Navbar />
+        <div className="sticky top-0 z-50 px-6 py-4 flex justify-between items-center bg-white/10 backdrop-blur-xl border-b border-white/5">
+           <div className="relative group max-w-md w-full hidden md:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+              <input 
+                type="text" 
+                placeholder="Search resources, nodes, or AI insights..." 
+                className="w-full bg-slate-200/50 dark:bg-slate-800/50 border-none rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none"
+              />
+           </div>
+           <Navbar />
+        </div>
         <main className="p-6 md:p-10 max-w-7xl mx-auto animate-fade-in-up">
           {renderContent()}
         </main>
