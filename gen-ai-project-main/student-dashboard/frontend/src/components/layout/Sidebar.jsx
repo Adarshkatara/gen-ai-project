@@ -24,6 +24,7 @@ const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
 
   const facultyItems = [
     { label: 'Dashboard', icon: LayoutDashboard },
+    { label: 'AI Analysis', icon: Sparkles },
     { label: 'Attendance', icon: CheckSquare },
     { label: 'Assignments', icon: FileText },
     { label: 'Marks', icon: Edit3 },

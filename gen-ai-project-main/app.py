@@ -340,18 +340,67 @@ def ai_chat_api():
     if not session.get('user_id'): return jsonify({'error': 'Unauthorized'}), 401
     data = request.json
     message = data.get('message', '').lower()
+    uid = session['user_id']
     
-    response = "I'm analyzing the institutional data... "
+    # Fetch real user context
+    user_context = query_db("SELECT * FROM Users WHERE id=?", (uid,), one=True)
+    attendance = query_db("SELECT c.title, SUM(CASE WHEN a.status='Present' THEN 1 ELSE 0 END) * 100.0 / COUNT(a.id) as rate FROM Attendance a JOIN Courses c ON a.course_id=c.id WHERE a.student_id=? GROUP BY c.id", (uid,))
+    marks = query_db("SELECT c.title, AVG(marks * 100.0 / max_marks) as avg_marks FROM Marks m JOIN Courses c ON m.course_id=c.id WHERE m.student_id=? GROUP BY c.id", (uid,))
+    
+    response = "I'm analyzing your academic profile... "
+    
     if 'attendance' in message:
-        response = "Your aggregate attendance is 78%. You are safe in most subjects, but 'Operating Systems' needs immediate attention."
-    elif 'fee' in message or 'payment' in message:
-        response = "Your Semester 4 fees are fully paid. The next billing cycle starts in 3 months."
-    elif 'exam' in message or 'result' in message:
-        response = "Mid-term results show a 15% improvement in MA201. Keep up the momentum for the finals."
+        if attendance:
+            low_att = [a for a in attendance if a['rate'] < 75]
+            if low_att:
+                response = f"Your attendance is critical in {', '.join([a['title'] for a in low_att])}. You need to attend more classes to be eligible for exams."
+            else:
+                response = "Your attendance is healthy across all subjects (above 75%). Keep it up!"
+        else:
+            response = "I don't see any attendance records for you yet."
+    elif 'exam' in message or 'mark' in message or 'grade' in message:
+        if marks:
+            top_sub = max(marks, key=lambda x: x['avg_marks'])
+            response = f"Your performance is strongest in {top_sub['title']} with an average of {top_sub['avg_marks']:.1f}%. Keep maintaining this momentum!"
+        else:
+            response = "I couldn't find any exam results in the system for you."
+    elif 'roadmap' in message or 'career' in message:
+        response = "Based on your strong performance in Data Structures and OS, I recommend focusing on Backend Engineering or System Design. You should explore our 'AWS Cloud' skill programs."
     else:
-        response = "I am Nexus AI, your academic copilot. I can help you with attendance tracking, fee queries, and study recommendations."
+        response = f"Hello {user_context['full_name'].split(' ')[0]}, I am Nexus AI. I can help you track your {len(attendance)} courses, monitor your attendance, or plan your career roadmap."
         
     return jsonify({'response': response})
+
+@app.route('/api/faculty/ai-insights')
+def faculty_ai_insights_api():
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    fac_id = session['user_id'] if session.get('role') == 'Faculty' else (query_db("SELECT id FROM Users WHERE role='Faculty' LIMIT 1", one=True) or {}).get('id', 0)
+    
+    # Find students with low attendance or low marks in this faculty's courses
+    at_risk = query_db("""
+        SELECT u.full_name, u.email, c.title as course_name, 
+               SUM(CASE WHEN a.status='Present' THEN 1 ELSE 0 END) * 100.0 / COUNT(a.id) as attendance_rate
+        FROM Users u
+        JOIN Attendance a ON u.id = a.student_id
+        JOIN Courses c ON a.course_id = c.id
+        WHERE c.faculty_id = ?
+        GROUP BY u.id, c.id
+        HAVING attendance_rate < 75
+    """, (fac_id,))
+    
+    performance_trends = query_db("""
+        SELECT c.title as course_name, AVG(m.marks * 100.0 / m.max_marks) as avg_marks
+        FROM Marks m
+        JOIN Courses c ON m.course_id = c.id
+        WHERE c.faculty_id = ?
+        GROUP BY c.id
+    """, (fac_id,))
+    
+    return jsonify({
+        'atRiskStudents': at_risk,
+        'performanceTrends': performance_trends,
+        'summary': f"Analysis complete. {len(at_risk)} students are currently below the 75% attendance threshold."
+    })
 
 # ======= REAL-TIME API POLLING ENGINE =======
 

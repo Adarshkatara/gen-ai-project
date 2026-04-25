@@ -229,64 +229,119 @@ export const NotificationsTab = () => {
   );
 };
 
+import axios from 'axios';
+import { Sparkles, BrainCircuit, Rocket, Target, ArrowRight } from 'lucide-react';
+
 export const AICopilotTab = () => {
   const [query, setQuery] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'ai', text: 'Hello! I am Nexus Copilot, your personalized academic AI. How can I assist you with your schedule or studies today?' }
+    { role: 'ai', text: 'Hello! I am Nexus Copilot, your personalized academic AI. I have access to your real-time attendance and marks. How can I assist you today?' }
   ]);
 
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     e.preventDefault();
     if (!query.trim()) return;
-    setMessages(prev => [...prev, { role: 'user', text: query }]);
+    
+    const userMsg = query;
+    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setQuery('');
-    setTimeout(() => {
-      let response = "I'm analyzing your academic data...";
-      if (query.toLowerCase().includes('attendance')) {
-        response = "Your attendance is currently 82% overall. However, Operating Systems is at 52%, which is below the safe threshold of 75%. I recommend attending the next 3 labs to normalize your status.";
-      } else if (query.toLowerCase().includes('grade') || query.toLowerCase().includes('mark')) {
-        response = "You have maintained an 'A' grade in Data Structures. Your recent Midterm in Linear Algebra was also strong. Keep focus on the upcoming Computer Networks quiz.";
-      } else {
-        response = "I have scanned the institutional database. Is there anything specific about your schedule, attendance, or upcoming assessments you'd like to discuss?";
-      }
-      setMessages(prev => [...prev, { role: 'ai', text: response }]);
-    }, 1000);
+    setIsTyping(true);
+
+    try {
+      const res = await axios.post('/api/ai/chat', { message: userMsg });
+      setMessages(prev => [...prev, { role: 'ai', text: res.data.response }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { role: 'ai', text: "I'm sorry, I'm having trouble connecting to my neural core right now." }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
-    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="card flex flex-col h-[600px] border border-indigo-200 dark:border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.1)]">
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-white/10">
-        <div className="bg-indigo-500 p-2 rounded-xl text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+    <div className="grid lg:grid-cols-3 gap-8">
+      <motion.div initial={{opacity:0, x:-20}} animate={{opacity:1, x:0}} className="lg:col-span-2 card flex flex-col h-[600px] border border-indigo-200 dark:border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.1)]">
+        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200 dark:border-white/10">
+          <div className="bg-indigo-500 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/20">
+            <BrainCircuit size={24}/>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Nexus AI Copilot</h2>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Live Academic Intelligence</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Nexus AI Copilot</h2>
-          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Your Personal Academic Assistant</p>
-        </div>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 custom-scrollbar">
-        {messages.map((msg, i) => (
-          <motion.div initial={{opacity:0, y: 10}} animate={{opacity:1, y: 0}} key={i} className={`flex ${msg.role === 'ai' ? 'justify-start' : 'justify-end'}`}>
-            <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'ai' ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-200/50 dark:border-white/5' : 'bg-indigo-600 text-white rounded-tr-none shadow-sm'}`}>
-              {msg.text}
+        
+        <div className="flex-1 overflow-y-auto mb-4 space-y-4 pr-2 custom-scrollbar">
+          {messages.map((msg, i) => (
+            <motion.div initial={{opacity:0, y: 10}} animate={{opacity:1, y: 0}} key={i} className={`flex ${msg.role === 'ai' ? 'justify-start' : 'justify-end'}`}>
+              <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed ${msg.role === 'ai' ? 'bg-white dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-200/50 dark:border-white/5 shadow-sm' : 'bg-indigo-600 text-white rounded-tr-none shadow-md shadow-indigo-600/10'}`}>
+                {msg.text}
+              </div>
+            </motion.div>
+          ))}
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-xl flex gap-1">
+                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce"></span>
+                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+              </div>
             </div>
-          </motion.div>
-        ))}
-      </div>
-      
-      <form onSubmit={handleSend} className="relative mt-auto">
-        <input 
-          type="text" 
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ask about your attendance, grades, or campus policies..." 
-          className="w-full p-4 pr-12 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#09090b] text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all"
-        />
-        <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-        </button>
-      </form>
-    </motion.div>
+          )}
+        </div>
+        
+        <form onSubmit={handleSend} className="relative mt-auto">
+          <input 
+            type="text" 
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Ask about your attendance, grades, or career roadmap..." 
+            className="w-full p-4 pr-12 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#0c0c0e] text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent transition-all"
+          />
+          <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20">
+            <Rocket size={18}/>
+          </button>
+        </form>
+      </motion.div>
+
+      <motion.div initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} transition={{delay:0.2}} className="space-y-6">
+        <div className="card bg-gradient-to-br from-indigo-600 to-purple-700 text-white border-none overflow-hidden relative group">
+           <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform"><Target size={80}/></div>
+           <div className="relative z-10">
+              <h3 className="text-xl font-black mb-2">Nexus Roadmap</h3>
+              <p className="text-indigo-100 text-xs font-medium mb-6">AI-generated career path based on your 8.4 CGPA and coding skills.</p>
+              
+              <div className="space-y-4">
+                 {[
+                   { step: 'Full Stack Dev', status: '85% Match', icon: <Rocket size={14}/> },
+                   { step: 'Cloud Architect', status: 'Suggested', icon: <Sparkles size={14}/> },
+                 ].map((item, i) => (
+                   <div key={i} className="flex items-center gap-3 bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-colors cursor-pointer">
+                      <div className="bg-white/20 p-2 rounded-lg">{item.icon}</div>
+                      <div>
+                        <div className="text-sm font-bold">{item.step}</div>
+                        <div className="text-[10px] font-medium opacity-70">{item.status}</div>
+                      </div>
+                      <ArrowRight size={14} className="ml-auto opacity-50"/>
+                   </div>
+                 ))}
+              </div>
+           </div>
+        </div>
+
+        <div className="card border-dashed border-indigo-200 dark:border-indigo-500/20 bg-indigo-50/30 dark:bg-indigo-500/5">
+           <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
+             <Sparkles size={16} className="text-indigo-500"/> Suggested Queries
+           </h4>
+           <div className="flex flex-wrap gap-2">
+             {["My attendance status", "Strongest subjects", "Career roadmap"].map((q, i) => (
+               <button key={i} onClick={() => setQuery(q)} className="text-[11px] font-semibold px-3 py-1.5 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/5 hover:border-indigo-400 transition-colors shadow-sm">
+                 {q}
+               </button>
+             ))}
+           </div>
+        </div>
+      </motion.div>
+    </div>
   );
 };

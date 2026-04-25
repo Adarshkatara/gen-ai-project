@@ -10,6 +10,7 @@ import StudentDirectory from '../components/faculty/StudentDirectory';
 import StudyMaterials from '../components/faculty/StudyMaterials';
 import Announcements from '../components/faculty/Announcements';
 import AIFacultyInsights from '../components/faculty/AIFacultyInsights';
+import FacultyAIInsights from '../components/faculty/FacultyAIInsights';
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 
@@ -60,7 +61,7 @@ const FacultyDashboard = () => {
              {[
                { label: 'Mark Attendance', action: () => setActiveTab('Attendance') },
                { label: 'Enter Grades', action: () => setActiveTab('Marks') },
-               { label: 'Generate Quiz (AI)', action: () => alert('AI Features opening soon') },
+               { label: 'Analyze Risk (AI)', action: () => setActiveTab('AI Analysis') },
                { label: 'Upload Materials', action: () => setActiveTab('Materials') },
              ].map((btn, i) => (
                <button key={i} onClick={btn.action} className="whitespace-nowrap px-5 py-2.5 bg-black/40 backdrop-blur-md rounded-xl font-semibold text-sm text-slate-200 border border-white/5 hover:border-indigo-400/50 hover:bg-slate-800 transition-all hover:-translate-y-1 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
@@ -73,6 +74,7 @@ const FacultyDashboard = () => {
 
           <div className="relative z-10 pt-4">
             {activeTab === 'Dashboard' && <FacultyOverview setActiveTab={setActiveTab} />}
+            {activeTab === 'AI Analysis' && <FacultyAIInsights />}
             {activeTab === 'Attendance' && <AttendanceMarking />}
             {activeTab === 'Assignments' && <AssignmentManager />}
             {activeTab === 'Marks' && <MarksEntry />}
