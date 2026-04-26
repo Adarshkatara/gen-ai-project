@@ -28,6 +28,22 @@ const AssignmentManager = () => {
 
   useEffect(() => { fetchData(); }, []);
 
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  const fetchAiSuggestions = async () => {
+    if (!courseId) return;
+    setIsAiLoading(true);
+    try {
+      const res = await axios.post('/api/ai/generate-assignment', { course_id: courseId });
+      setTitle(res.data.title);
+      setDescription(res.data.description);
+    } catch (e) {
+      alert('Failed to fetch AI suggestions');
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -46,7 +62,17 @@ const AssignmentManager = () => {
       <div className="lg:col-span-1 bg-zinc-950/60 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-2xl h-fit relative overflow-hidden group hover:border-indigo-500/20 transition-colors duration-500">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent z-0 pointer-events-none"></div>
         <div className="relative z-10">
-          <h3 className="text-xl font-bold flex items-center gap-2 mb-6 text-white"><div className="p-2bg-indigo-500/20rounded-lg bg-indigo-500/20"><Plus className="text-indigo-400" size={20}/></div> Publish Mission</h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-bold flex items-center gap-2 text-white"><div className="p-2 bg-indigo-500/20 rounded-lg"><Plus className="text-indigo-400" size={20}/></div> Publish Mission</h3>
+            <button 
+              onClick={fetchAiSuggestions}
+              disabled={isAiLoading}
+              className="p-2 bg-indigo-500/10 hover:bg-indigo-500/20 rounded-lg border border-indigo-500/30 text-indigo-400 transition-all flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider"
+              title="Generate with AI"
+            >
+              {isAiLoading ? '...' : <><Plus size={12}/> AI Suggestions</>}
+            </button>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Target Course</label>

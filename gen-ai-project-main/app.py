@@ -402,6 +402,38 @@ def faculty_ai_insights_api():
         'summary': f"Analysis complete. {len(at_risk)} students are currently below the 75% attendance threshold."
     })
 
+@app.route('/api/ai/generate-assignment', methods=['POST'])
+def ai_generate_assignment():
+    if session.get('role') not in ['Faculty', 'Admin']: return jsonify({'error': 'Unauthorized'}), 401
+    course_id = request.json.get('course_id')
+    course = query_db("SELECT title FROM Courses WHERE id=?", (course_id,), one=True)
+    
+    if not course: return jsonify({'error': 'Course not found'}), 404
+    
+    # Mock AI logic based on course title
+    title = course['title']
+    suggestions = {
+        'Data Structures': {
+            'title': 'Advanced Tree Balancing Analysis',
+            'description': 'Compare the efficiency of AVL trees vs Red-Black trees for a set of 1 million integers.'
+        },
+        'Operating Systems': {
+            'title': 'Kernel Schedulers Simulation',
+            'description': 'Implement a simple multi-level feedback queue scheduler in C and analyze CPU utilization.'
+        },
+        'Computer Networks': {
+            'title': 'TCP/UDP Performance Benchmarking',
+            'description': 'Measure latency and packet loss between two nodes using socket programming.'
+        }
+    }
+    
+    suggestion = suggestions.get(title, {
+        'title': f'Advanced {title} Project',
+        'description': f'A comprehensive research project exploring modern trends in {title}.'
+    })
+    
+    return jsonify(suggestion)
+
 # ======= REAL-TIME API POLLING ENGINE =======
 
 def push_notification(user_id, role_target, title, message, notif_type='Info'):
