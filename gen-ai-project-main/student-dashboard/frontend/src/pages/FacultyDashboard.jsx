@@ -32,11 +32,11 @@ const FacultyDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-black relative">
+    <div className="flex h-screen overflow-hidden bg-slate-50 relative">
       {/* Background glowing orbs for premium feel */}
-      <div className="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-900/20 blur-[130px] pointer-events-none z-0 animate-pulse mix-blend-screen" style={{ animationDuration: '6s' }}></div>
-      <div className="absolute bottom-[-15%] right-[-5%] w-[40%] h-[60%] rounded-full bg-pink-900/10 blur-[120px] pointer-events-none z-0 animate-pulse mix-blend-screen" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
-      <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-100"></div>
+      <div className="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-[130px] pointer-events-none z-0 animate-pulse mix-blend-multiply" style={{ animationDuration: '6s' }}></div>
+      <div className="absolute bottom-[-15%] right-[-5%] w-[40%] h-[60%] rounded-full bg-pink-500/10 blur-[120px] pointer-events-none z-0 animate-pulse mix-blend-multiply" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
+      <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-[0.03]"></div>
       
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 overflow-y-auto bg-transparent relative z-10 fade-in-up transition-all duration-700">
@@ -46,8 +46,8 @@ const FacultyDashboard = () => {
           {/* Global Header & Greeting block for Faculty */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative z-20 mb-2">
             <div>
-              <h1 className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
-                {getGreeting()}, <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">{getPronoun()} {user?.name?.split(' ')[0] || 'Scholar'}</span>
+              <h1 className="text-4xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                {getGreeting()}, <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">{getPronoun()} {user?.name?.split(' ')[0] || 'Scholar'}</span>
               </h1>
               <p className="text-slate-400 mt-2 font-medium text-lg">Your academic metrics are synchronized. Here is your situational overview.</p>
             </div>
@@ -64,7 +64,7 @@ const FacultyDashboard = () => {
                { label: 'Analyze Risk (AI)', action: () => setActiveTab('AI Analysis') },
                { label: 'Upload Materials', action: () => setActiveTab('Materials') },
              ].map((btn, i) => (
-               <button key={i} onClick={btn.action} className="whitespace-nowrap px-5 py-2.5 bg-black/40 backdrop-blur-md rounded-xl font-semibold text-sm text-slate-200 border border-white/5 hover:border-indigo-400/50 hover:bg-slate-800 transition-all hover:-translate-y-1 shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+               <button key={i} onClick={btn.action} className="whitespace-nowrap px-5 py-2.5 bg-white/80 backdrop-blur-md rounded-xl font-semibold text-sm text-slate-700 border border-slate-200 hover:border-indigo-400 hover:bg-white hover:text-indigo-600 transition-all hover:-translate-y-1 shadow-sm">
                  {btn.label}
                </button>
              ))}
