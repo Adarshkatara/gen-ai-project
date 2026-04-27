@@ -1,3 +1,4 @@
+// Main Application Component for Routing
 import { Routes, Route } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from './context/AuthContext';
