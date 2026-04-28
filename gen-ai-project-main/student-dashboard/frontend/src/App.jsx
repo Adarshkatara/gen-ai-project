@@ -1,3 +1,4 @@
+// Dummy comment to enable commit
 // Main Application Component for Routing
 import { Routes, Route } from 'react-router-dom';
 import { useContext, useState } from 'react';
