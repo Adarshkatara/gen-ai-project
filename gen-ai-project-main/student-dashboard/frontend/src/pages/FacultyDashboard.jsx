@@ -12,7 +12,7 @@ import Announcements from '../components/faculty/Announcements';
 import AIFacultyInsights from '../components/faculty/AIFacultyInsights';
 import FacultyAIInsights from '../components/faculty/FacultyAIInsights';
 import { motion } from 'framer-motion';
-import { MessageCircle } from 'lucide-react';
+import { Smile, Coffee } from 'lucide-react';
 
 const FacultyDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -32,10 +32,10 @@ const FacultyDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 relative">
+    <div className="flex h-screen overflow-hidden bg-stone-50 dark:bg-[#1C1917] relative">
       {/* Background glowing orbs for premium feel */}
-      <div className="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-[130px] pointer-events-none z-0 animate-pulse mix-blend-multiply" style={{ animationDuration: '6s' }}></div>
-      <div className="absolute bottom-[-15%] right-[-5%] w-[40%] h-[60%] rounded-full bg-pink-500/10 blur-[120px] pointer-events-none z-0 animate-pulse mix-blend-multiply" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
+      <div className="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/10 blur-[130px] pointer-events-none z-0 animate-pulse mix-blend-multiply" style={{ animationDuration: '6s' }}></div>
+      <div className="absolute bottom-[-15%] right-[-5%] w-[40%] h-[60%] rounded-full bg-teal-500/10 blur-[120px] pointer-events-none z-0 animate-pulse mix-blend-multiply" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-[0.03]"></div>
       
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -46,13 +46,13 @@ const FacultyDashboard = () => {
           {/* Global Header & Greeting block for Faculty */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 relative z-20 mb-2">
             <div>
-              <h1 className="text-4xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-                {getGreeting()}, <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">{getPronoun()} {user?.name?.split(' ')[0] || 'Scholar'}</span>
+              <h1 className="text-4xl font-black text-stone-800 dark:text-white tracking-tight flex items-center gap-3">
+                {getGreeting()}, <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">{getPronoun()} {user?.name?.split(' ')[0] || 'Friend'}</span>
               </h1>
-              <p className="text-slate-400 mt-2 font-medium text-lg">Your academic metrics are synchronized. Here is your situational overview.</p>
+              <p className="text-stone-500 dark:text-stone-400 mt-2 font-medium text-lg flex items-center gap-2">Welcome to the faculty lounge. Here's your teaching overview. <Coffee size={18} className="text-amber-500" /></p>
             </div>
-            <motion.button whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(99,102,241,0.4)" }} onClick={() => setShowFeedback(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 hover:bg-indigo-700 shadow-[0_4px_14px_0_rgb(0,118,255,39%)] transition-all focus:ring-4 focus:ring-indigo-500/20">
-              <MessageCircle size={18} /> Support Desk
+            <motion.button whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(16,185,129,0.4)" }} onClick={() => setShowFeedback(true)} className="bg-emerald-500 text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-emerald-600 shadow-md transition-all focus:ring-4 focus:ring-emerald-500/20">
+              <Smile size={18} /> Need Help?
             </motion.button>
           </motion.div>
 
@@ -64,7 +64,7 @@ const FacultyDashboard = () => {
                { label: 'Analyze Risk (AI)', action: () => setActiveTab('AI Analysis') },
                { label: 'Upload Materials', action: () => setActiveTab('Materials') },
              ].map((btn, i) => (
-               <button key={i} onClick={btn.action} className="whitespace-nowrap px-5 py-2.5 bg-white/80 backdrop-blur-md rounded-xl font-semibold text-sm text-slate-700 border border-slate-200 hover:border-indigo-400 hover:bg-white hover:text-indigo-600 transition-all hover:-translate-y-1 shadow-sm">
+               <button key={i} onClick={btn.action} className="whitespace-nowrap px-6 py-2.5 bg-white/80 dark:bg-stone-800/80 backdrop-blur-md rounded-full font-bold text-sm text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-white/5 hover:border-emerald-400/50 hover:bg-white dark:hover:bg-stone-700 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all hover:-translate-y-1 shadow-sm">
                  {btn.label}
                </button>
              ))}

@@ -13,12 +13,13 @@ import BroadcastSystem from '../components/admin/BroadcastSystem';
 import DocumentManager from '../components/admin/DocumentManager';
 import ActivityAuditor from '../components/admin/ActivityAuditor';
 
+// Main Admin Dashboard Component
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('Dashboard');
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#09090b] relative">
+    <div className="flex h-screen overflow-hidden bg-stone-50 dark:bg-[#1C1917] relative">
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern opacity-100"></div>
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 overflow-y-auto bg-transparent relative z-10">

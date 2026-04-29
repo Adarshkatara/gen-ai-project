@@ -52,38 +52,38 @@ const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
   const menuItems = isAdmin ? adminItems : isFaculty ? facultyItems : studentItems;
 
   return (
-    <aside className="w-64 flex-shrink-0 h-screen overflow-y-auto hidden md:block sticky top-0 custom-scrollbar z-50 bg-slate-50 dark:bg-[#09090b] border-r border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400">
-      <div className="h-16 flex items-center px-6 border-b border-slate-200 dark:border-white/5 bg-white/50 dark:bg-black/20 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-xl tracking-wide">
-          <div className="bg-indigo-600 p-1.5 rounded-lg shadow-sm shadow-indigo-500/20">
+    <aside className="w-64 flex-shrink-0 h-screen overflow-y-auto hidden md:block sticky top-0 custom-scrollbar z-50 bg-stone-50 dark:bg-[#1C1917] border-r border-stone-200 dark:border-white/5 text-stone-600 dark:text-stone-400">
+      <div className="h-16 flex items-center px-6 border-b border-stone-200 dark:border-white/5 bg-white/50 dark:bg-black/20 backdrop-blur-md sticky top-0 z-10">
+        <div className="flex items-center gap-2 text-stone-900 dark:text-white font-bold text-xl tracking-wide">
+          <div className="bg-emerald-500 p-1.5 rounded-xl shadow-sm shadow-emerald-500/20">
             <LayoutDashboard size={20} className="text-white" />
           </div>
-          NEXUS Edu
+          Campus Portal
         </div>
       </div>
       <div className="p-4">
-        <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 px-2">Main Menu</p>
+        <p className="text-xs font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-4 px-2">Main Menu</p>
         <ul className="space-y-1.5">
           {menuItems.map((item, index) => {
             const isActive = activeTab === item.label;
             return (
-              <li key={index}>
+              <li key={index} className="relative">
                 <a 
                   href="#"
                   onClick={(e) => { e.preventDefault(); setActiveTab(item.label); }}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 font-medium text-sm group ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 font-bold text-sm group ${
                     isActive 
-                      ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-semibold shadow-sm' 
-                      : 'hover:bg-white dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white hover:shadow-sm'
+                      ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm' 
+                      : 'hover:bg-white dark:hover:bg-white/5 hover:text-stone-900 dark:hover:text-white hover:shadow-sm'
                   }`}
                 >
                   <item.icon size={18} className={`${
                     isActive 
-                      ? 'text-indigo-600 dark:text-indigo-400' 
-                      : 'text-slate-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400'
+                      ? 'text-emerald-600 dark:text-emerald-400' 
+                      : 'text-stone-400 group-hover:text-emerald-500 dark:group-hover:text-emerald-400'
                   } transition-colors duration-300`} />
                   {item.label}
-                  {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-600 rounded-r-full animate-fade-in-up" />}
+                  {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-emerald-500 rounded-r-full animate-fade-in-up" />}
                 </a>
               </li>
             );
