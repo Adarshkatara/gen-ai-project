@@ -48,7 +48,7 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center font-medium text-stone-500 dark:text-stone-400">Warming up your dashboard...</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center font-medium text-stone-500 dark:text-stone-400">Warming up your Nexus dashboard...</div>;
 
   const getGreeting = () => {
     const hour = new Date().getHours();
